@@ -1,11 +1,10 @@
 
-import { ECO_COUNTER_API } from "$env/static/private";
 
 export async function load({params}){
 
   const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'X-API-KEY': ECO_COUNTER_API}
+    headers: {accept: 'application/json', 'X-API-KEY': process.env.ECO_COUNTER_API}
   };
 
   const dailyTraffic = fetch('https://api.eco-counter.com/api/v2/statistical/adt/by/site?dateRange=currentMonth&groupBy=siteAndTravelMode&travelModes=pedestrian&travelModes=bike', options)
