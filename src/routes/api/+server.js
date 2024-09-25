@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import {group,rollup,sum,timeDay} from 'd3'
-import { ECO_COUNTER_API } from "$env/static/private";
+// import { ECO_COUNTER_API } from "$env/static/private";
 
 
 export async function POST({ request }) {
@@ -10,7 +10,7 @@ export async function POST({ request }) {
 
 	const options = {
 		method: 'GET',
-		headers: {accept: 'application/json', 'X-API-KEY': ECO_COUNTER_API}
+		headers: {accept: 'application/json', 'X-API-KEY': process.env.ECO_COUNTER_API}
 	  };
 
 		let t = new Date();
