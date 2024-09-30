@@ -1,12 +1,20 @@
 <script>
 	let expanded = false;
 
+	let expandedHierarchy1 = true;
+	let expandedHierarchy2 = false;
+
 	import { visModeOptions, visMode } from "../../stores/filterData";
 
 	const setMode = function (d) {
 		visMode.set(d.value);
 	};
 	const toggleExpanded = (_) => (expanded = !expanded);
+
+	const toggleHierarchy1 = (_) => (expandedHierarchy1 = !expandedHierarchy1);
+	const toggleHierarchy2 = (_) => (expandedHierarchy2 = !expandedHierarchy2
+	)
+	;
 
 	setTimeout(()=>{expanded=true},1000)
 </script>
@@ -19,17 +27,52 @@
 
 	<section class="non-essential">
 		<ul>
-			<h3>Data source</h3>
+			<h3>Data Type</h3>
 			<hr />
 
-			{#each $visModeOptions as d, i}
-				<li
-					on:click={setMode(d)}
-					style="color:{$visMode == d.value ? 'white' : '#A2B7C4'}"
-				>
-					<span>{d.label}</span>
-				</li>
-			{/each}
+			<!-- Hierarchy 1 -->
+			<li>
+				<button on:click={toggleHierarchy1}>
+					<div class='hierarchy'>
+					<span>{expandedHierarchy1 ? '▼' : ''} Boundary</span>
+				</div>
+				</button>
+				{#if expandedHierarchy1}
+					<ul>
+						{#each $visModeOptions.slice(0, 2) as d, i}
+							<li
+								on:click={() => setMode(d)}
+								style="color: {$visMode == d.value ? 'white' : '#A2B7C4'}"
+							>
+								<span>{d.label}</span>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</li>
+
+			<!-- Hierarchy 2 -->
+			<li>
+				<button on:click={toggleHierarchy2}>
+					<div class='hierarchy'>
+						<span>{expandedHierarchy2 ? '▼' : ''} Route-based</span>
+					</div>				</button>
+				{#if expandedHierarchy2}
+					<ul>
+						{#each $visModeOptions.slice(2, 4) as d, i}
+							<li
+								on:click={() => setMode(d)}
+								style="color: {$visMode == d.value ? 'white' : '#A2B7C4'}"
+							>
+								<span>{d.label}</span>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</li>
+
+
+
 		</ul>
 	</section>
 </nav>
@@ -48,6 +91,17 @@
 	.expanded {
 		transition: ease-out 500ms;
 		width: 200px;
+	}
+
+	.hierarchy{
+		font-size: 1rem;
+		padding: 0px;
+		align-items: start;
+		text-align: left;
+		text-transform: none;
+		font-family: var(--font-family-sans);
+
+
 	}
 
 	ul {

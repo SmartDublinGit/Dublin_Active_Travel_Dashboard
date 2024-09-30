@@ -38,7 +38,7 @@
   };
 
   let txt = "";
-  let tit = "this data";
+  let tit = "this view";
 
   $: {
     console.log($RegionID);
@@ -46,7 +46,7 @@
     if ($RegionID == "999999") {
       txt =
         'This view shows active travel data based on <a style="font-weight:bold">Google\'s modal split data of Dublin for 2023</a>, aggregated at electoral district level. This modal split data counts all trips within the Dublin boundary, in addition to those leaving and entering the Dublin boundary. Click on a <a style="font-weight:bold;color:#516dae">statistic</a> for information on how it was calculated. ';
-    tit = 'this data'
+    tit = 'this view'
       }
 
     if (sel == "prem_deaths") {
@@ -80,27 +80,27 @@
 
   $: walk =
     $RegionID == "999999"
-      ? f2((100 * $sumsGoogle["ON FOOT_trips"]) / $sumsGoogle["TOTAL_trips"]) +
+      ? f((100 * $sumsGoogle["ON FOOT_trips"]) / $sumsGoogle["TOTAL_trips"]) +
         "%"
-      : f2(100 * $RegionID["walk_pct"]) + "%";
+      : f(100 * $RegionID["walk_pct"]) + "%";
   $: cycle =
     $RegionID == "999999"
-      ? f2((100 * $sumsGoogle["CYCLING_trips"]) / $sumsGoogle["TOTAL_trips"]) +
+      ? f((100 * $sumsGoogle["CYCLING_trips"]) / $sumsGoogle["TOTAL_trips"]) +
         "%"
-      : f2(100 * $RegionID["cycle_pct"]) + "%";
+      : f(100 * $RegionID["cycle_pct"]) + "%";
   $: drive =
     $RegionID == "999999"
-      ? f2(
+      ? f(
           (100 * $sumsGoogle["AUTOMOBILE_trips"]) / $sumsGoogle["TOTAL_trips"]
         ) + "%"
-      : f2((100 * $RegionID["AUTOMOBILE_trips"]) / $RegionID["TOTAL_trips"]) +
+      : f((100 * $RegionID["AUTOMOBILE_trips"]) / $RegionID["TOTAL_trips"]) +
         "%";
 
   $: pubs =
     $RegionID == "999999"
-      ? f2((100 * $sumsGoogle["PUBLIC_trips"]) / $sumsGoogle["TOTAL_trips"]) +
+      ? f((100 * $sumsGoogle["PUBLIC_trips"]) / $sumsGoogle["TOTAL_trips"]) +
         "%"
-      : f2((100 * $RegionID["PUBLIC_trips"]) / $RegionID["TOTAL_trips"]) + "%";
+      : f((100 * $RegionID["PUBLIC_trips"]) / $RegionID["TOTAL_trips"]) + "%";
 
   $: co2_saved_year =
     $RegionID == "999999"
@@ -130,13 +130,13 @@
       resetMap();
     }}
   >
-    <h2 class="dublin-header">{"Regional information: 2023"}</h2>
+  <h2 class="dublin-header">{"Boundary Statistics by Region"}</h2>
 
     <div class="flex-items3">
       <div class="a1">
         {#if location === "Dublin"}
           <div class="text">
-            <p class="label">Region</p>
+            <p class="label">Google Modal Split 2023</p>
             <p class="loc">{location}</p>
             <p class="label" />
 
@@ -166,7 +166,7 @@
           </div>
         {:else}
           <div class="text">
-            <p class="label">Region</p>
+            <p class="label">Google Modal Split 2023</p>
             <p class="loc">{location}</p>
             <p class="label">{@html "&#9204;"}</p>
 
@@ -390,7 +390,7 @@
   .label {
     font-size: 0.9rem;
     font-style: normal;
-    color: #324754;
+    color: #6d8495;
     font-weight: 700;
     line-height: 130%; /* 24px */
     margin-bottom: 6px;

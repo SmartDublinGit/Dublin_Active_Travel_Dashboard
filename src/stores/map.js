@@ -1,8 +1,8 @@
 import mapboxgl from "mapbox-gl";
 import { get, writable } from "svelte/store";
-// import { env } from '$env/dynamic/public';
+//  import { env } from '$env/dynamic/public';
 
-import { RegionID, fillLayer, stepcounters, showLanes } from "./region";
+import { RegionID, fillLayer, stepcounters, showLanes, strava_track } from "./region";
 import { ZoomOut, getCurrentCoords } from "./ZoomOut";
 import { metricToggle } from "./filterData"
 
@@ -190,6 +190,31 @@ export function newMapStore(el) {
           'data': "./segregated_lanes.geojson"
         });
 
+        map.addSource('C2CC', {
+          'type': 'geojson',
+          'data': "./strava/C2CC.geojson"
+        });
+
+        map.addSource('DLR', {
+          'type': 'geojson',
+          'data': "./strava/DLR.geojson"
+        });
+
+        map.addSource('Dodder', {
+          'type': 'geojson',
+          'data': "./strava/Dodder River.geojson"
+        });
+
+        map.addSource('K2TS', {
+          'type': 'geojson',
+          'data': "./strava/K2TS.geojson"
+        });
+
+        map.addSource('Portmarnock', {
+          'type': 'geojson',
+          'data': "./strava/Portmarnock.geojson"
+        });
+
         // toggle layers based on electoral boundary
         for (let layer of censusLayers) {
           if (layer == get(metricToggle)) {
@@ -327,6 +352,78 @@ export function newMapStore(el) {
           }
         });
 
+        map.addLayer({
+          'id': 'C2CC',
+          'type': 'line',
+          'source': 'C2CC',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#955196',
+            'line-width': 0
+          }
+        });
+
+        map.addLayer({
+          'id': 'DLR',
+          'type': 'line',
+          'source': 'DLR',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#955196',
+            'line-width': 0
+          }
+        });
+
+
+        map.addLayer({
+          'id': 'Dodder',
+          'type': 'line',
+          'source': 'Dodder',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#955196',
+            'line-width': 0
+          }
+        });
+
+        map.addLayer({
+          'id': 'K2TS',
+          'type': 'line',
+          'source': 'K2TS',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#955196',
+            'line-width': 0
+          }
+        });
+
+        map.addLayer({
+          'id': 'Portmarnock',
+          'type': 'line',
+          'source': 'Portmarnock',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#955196',
+            'line-width': 0
+          }
+        });
+
+
 
         let counters = get(stepcounters)
         console.log(counters)
@@ -375,7 +472,30 @@ export function newMapStore(el) {
 
         }
 
+
       });
+
+      map.on('click', 'DLR', (e) => {
+        strava_track.set('DLR')
+      })
+
+      map.on('click', 'C2CC', (e) => {
+
+        strava_track.set('C2CC')
+      })
+
+      map.on('click', 'Dodder', (e) => {
+
+        strava_track.set('Dodder')
+      })
+
+      map.on('click', 'K2TS', (e) => {
+        strava_track.set('K2TS')
+      })
+
+      map.on('click', 'Portmarnock', (e) => {
+        strava_track.set('Portmarnock')
+      })
 
 
       // BUTTON
@@ -415,7 +535,62 @@ export function newMapStore(el) {
       let opts = options
       let markers = document.getElementsByClassName("marker");
 
-     
+
+        if(get(metricToggle).includes('strava')){
+          map.setPaintProperty(
+            "C2CC",
+            "line-width",
+            10
+          );
+          map.setPaintProperty(
+            "DLR",
+            "line-width",
+            10
+          );
+          map.setPaintProperty(
+            "Dodder",
+            "line-width",
+            10
+          );
+          map.setPaintProperty(
+            "K2TS",
+            "line-width",
+            10
+          );
+          map.setPaintProperty(
+            "Portmarnock",
+            "line-width",
+            10
+          );
+        }
+
+        else{
+          map.setPaintProperty(
+            "C2CC",
+            "line-width",
+            0
+          );
+          map.setPaintProperty(
+            "DLR",
+            "line-width",
+            0
+          );
+          map.setPaintProperty(
+            "Dodder",
+            "line-width",
+            0
+          );
+          map.setPaintProperty(
+            "K2TS",
+            "line-width",
+            0
+          );
+          map.setPaintProperty(
+            "Portmarnock",
+            "line-width",
+            0
+          );
+        }
 
       if (toggle.includes('counter')) {
 
@@ -473,7 +648,7 @@ export function plotLanes(){
     let tmpcol = 'white'
 
     if(get(metricToggle).includes('counter'))
-    {tmpcol = '#333'}
+    {tmpcol = '#324754'}
 
     map.setPaintProperty(
       "LineString",

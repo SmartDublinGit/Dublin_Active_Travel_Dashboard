@@ -20,7 +20,7 @@
 
     let txt =
         "This is a live view of pedestrian and cycling counters in Dublin, accessed through the Eco-visio API. Click on a counter for pedestrian and/or cycling footfall over different time periods. Note: there are issues with some counters, which Eco-Visio are investigating.";
-    let tit = "this data ";
+    let tit = "this view ";
 
 
     async function add(a) {
@@ -235,7 +235,7 @@ function updateTotals(data) {
             resetMap();
         }}
     >
-        <h2 class="dublin-header">{"Eco-Visio counter data"}</h2>
+        <h2 class="dublin-header">{"Pedestrian & Cycle counter data"}</h2>
 
         <div class="flex-items3">
             <div class="a1">
@@ -257,10 +257,9 @@ function updateTotals(data) {
         <div class="text2">
             <h2 class="dublin-header">{"Time Series"}</h2>
             <div class="text">
-                <div class="flex-items3">
                     <div class="a1">
                         <p class="label" style="margin-bottom: 0px;">
-                            {(ttype=='pedestrian'?'Pedestrian ':"Cyclist ")+'counts'}
+                            {"Historical "+(ttype=='pedestrian'?'Pedestrian ':"Cyclist ")+'counts'}
                         </p>
                     </div>
 
@@ -273,7 +272,7 @@ function updateTotals(data) {
                             {/each}
                         </select>
                     </div>
-                </div>
+                
             </div>
             {#if c.length > 0}
                 <LinePlot data={c} width={width / 2} {ttype} plot_type={counterMode} />
@@ -413,7 +412,7 @@ function updateTotals(data) {
     .label {
         font-size: 0.9rem;
         font-style: normal;
-        color: #324754;
+        color: #6d8495;
         font-weight: 700;
         line-height: 130%; /* 24px */
         margin-bottom: 6px;
@@ -427,9 +426,9 @@ function updateTotals(data) {
         border: 2px solid #aaaaaa88;
         background-color: #ffffffdd;
         font-size: 0.9rem;
-        margin-bottom: 6px;
-        right: 50px;
-        position: absolute;
+        margin-top: 10px;
+        width: fit-content;
+    
     }
 
     @media screen and (max-width: 450px) {

@@ -3,43 +3,45 @@ import { writable, readable, derived } from "svelte/store";
 
 //holds all possible active variables
 export const metricToggleOptions = readable([
-  { label: "Walking 2022: Total", value: "On foot - Total_pct", group: 'census' },
-  { label: "Cycling 2022: Total", value: "Bicycle - Total_pct", group: 'census' },
-  { label: "Walking and Cycling 2022: Total", value: "Active travel - Total_pct", group: 'census' },
-  { label: "Walking 2016: Total", value: "On foot - Total_pct_16", group: 'census' },
-  { label: "Cycling 2016: Total", value: "Bicycle - Total_pct_16", group: 'census' },
-  { label: "Walking and Cycling 2016: Total", value: "Active travel - Total_pct_16", group: 'census' },
-  { label: "Change in Walking 2016-2022: Total", value: "delta_On foot - Total_pct", group: 'census' },
-  { label: "Change in Cycling 2016-2022: Total", value: "delta_Bicycle - Total_pct", group: 'census' },
-  { label: "Change in Walking & Cycling 2016-2022: Total", value: 'delta_Active travel - Total_pct', group: 'census' },
+  { label: "Walking to school, college or work: 2022", value: "On foot - Total_pct", group: 'census' },
+  { label: "Cycling to school, college or work: 2022", value: "Bicycle - Total_pct", group: 'census' },
+  { label: "Walking/cycling to school, college or work: 2022", value: "Active travel - Total_pct", group: 'census' },
+  { label: "Walking to school, college or work: 2016", value: "On foot - Total_pct_16", group: 'census' },
+  { label: "Cycling to school, college or work: 2016", value: "Bicycle - Total_pct_16", group: 'census' },
+  { label: "Walking/cycling to school, college or work: 2016", value: "Active travel - Total_pct_16", group: 'census' },
+  { label: "Change in walking to school, college or work, 2016-2022", value: "delta_On foot - Total_pct", group: 'census' },
+  { label: "Change in cycling to school, college or work, 2016-2022", value: "delta_Bicycle - Total_pct", group: 'census' },
+  { label: "Change in walking/cycling to school, college or work, 2016-2022", value: 'delta_Active travel - Total_pct', group: 'census' },
 
-  { label: "Walking 2022: Work", value: "On foot - Work_pct", group: 'census' },
-  { label: "Cycling 2022: Work", value: "Bicycle - Work_pct", group: 'census' },
-  { label: "Walking and Cycling 2022: Work", value: "Active travel - Work_pct", group: 'census' },
-  { label: "Walking 2016: Work", value: "On foot - Work_pct_16", group: 'census' },
-  { label: "Cycling 2016: Work", value: "Bicycle - Work_pct_16", group: 'census' },
-  { label: "Walking and Cycling 2016: Work", value: "Active travel - Work_pct_16", group: 'census' },
-  { label: "Change in Walking 2016-2022: Work", value: "delta_On foot - Work_pct", group: 'census' },
-  { label: "Change in Cycling 2016-2022: Work", value: "delta_Bicycle - Work_pct", group: 'census' },
-  { label: "Change in Walking & Cycling 2016-2022: Work", value: 'delta_Active travel - Work_pct', group: 'census' },
-  
-  { label: "Walking 2022: School/college", value: "On foot - School, college or childcare_pct", group: 'census' },
-  { label: "Cycling 2022: School/college", value: "Bicycle - School, college or childcare_pct", group: 'census' },
-  { label: "Walking and Cycling 2022: School/college", value: "Active travel - School, college or childcare_pct", group: 'census' },
-  { label: "Walking 2016: School/college", value: "On foot - School, college or childcare_pct_16", group: 'census' },
-  { label: "Cycling 2016: School/college", value: "Bicycle - School, college or childcare_pct_16", group: 'census' },
-  { label: "Walking and Cycling School/college: Total", value: "Active travel - School, college or childcare_pct_16", group: 'census' },
-  { label: "Change in Walking 2016-2022: School/college", value: "delta_On foot - School, college or childcare_pct", group: 'census' },
-  { label: "Change in Cycling 2016-2022: School/college", value: "delta_Bicycle - School, college or childcare_pct", group: 'census' },
-  { label: "Change in Walking & Cycling 2016-2022: School/college", value: 'delta_Active travel - School, college or childcare_pct', group: 'census' },
+  { label: "Walking to work: 2022", value: "On foot - Work_pct", group: 'census' },
+  { label: "Cycling to work: 2022", value: "Bicycle - Work_pct", group: 'census' },
+  { label: "Walking/cycling to work: 2022", value: "Active travel - Work_pct", group: 'census' },
+  { label: "Walking to work: 2016", value: "On foot - Work_pct_16", group: 'census' },
+  { label: "Cycling to work: 2016", value: "Bicycle - Work_pct_16", group: 'census' },
+  { label: "Walking/cycling to work: 2016", value: "Active travel - Work_pct_16", group: 'census' },
+  { label: "Change in walking to work, 2016-2022", value: "delta_On foot - Work_pct", group: 'census' },
+  { label: "Change in cycling to work, 2016-2022", value: "delta_Bicycle - Work_pct", group: 'census' },
+  { label: "Change in walking/cycling to work, 2016-2022", value: 'delta_Active travel - Work_pct', group: 'census' },
 
-  { label: "Walking 2023", value: "walk_pct", group: 'google' },
-  { label: "Cycling 2023", value: "cycle_pct", group: 'google' },
-  { label: "Walking and Cycling 2023", value: "active_pct", group: 'google' },
+  { label: "Walking to school or college: 2022", value: "On foot - School, college or childcare_pct", group: 'census' },
+  { label: "Cycling to school or college: 2022", value: "Bicycle - School, college or childcare_pct", group: 'census' },
+  { label: "Walking/cycling to school or college: 2022", value: "Active travel - School, college or childcare_pct", group: 'census' },
+  { label: "Walking to school or college: 2016", value: "On foot - School, college or childcare_pct_16", group: 'census' },
+  { label: "Cycling to school or college: 2016", value: "Bicycle - School, college or childcare_pct_16", group: 'census' },
+  { label: "Walking/cycling to school or college: 2016", value: "Active travel - School, college or childcare_pct_16", group: 'census' },
+  { label: "Change in walking to school or college, 2016-2022", value: "delta_On foot - School, college or childcare_pct", group: 'census' },
+  { label: "Change in cycling to school or college, 2016-2022", value: "delta_Bicycle - School, college or childcare_pct", group: 'census' },
+  { label: "Change in walking/cycling to school or college, 2016-2022", value: 'delta_Active travel - School, college or childcare_pct', group: 'census' },
 
-  { label: "Walking", value: "walk_counter", group: 'temp' },
-  { label: "Cycling", value: "cycle_counter", group: 'temp' },
-  { label: "Walking and Cycling", value: "active_counter", group: 'temp' },
+  { label: "Walking trips, Google modal split 2023", value: "walk_pct", group: 'google' },
+  { label: "Cycling trips, Google modal split 2023", value: "cycle_pct", group: 'google' },
+  { label: "Walking/cycling trips, Google modal split 2023", value: "active_pct", group: 'google' },
+
+  { label: "Live: pedestrian counters", value: "walk_counter", group: 'temp' },
+  { label: "Live: cycle counters", value: "cycle_counter", group: 'temp' },
+  { label: "Live: Pedestrian and cycle counters", value: "active_counter", group: 'temp' },
+
+  { label: "Cycle routes", value: "strava_counter", group: 'strava' },
 ]);
 
 export const modeToggleOptions = readable(['Walking', 'Cycling', 'Walking and Cycling'])
@@ -47,8 +49,8 @@ export const modeToggleOptions = readable(['Walking', 'Cycling', 'Walking and Cy
 export const visModeOptions = readable([
   { label: "Census", value: "census" },
   { label: "Google Trips", value: "google" },
-  { label: "Eco Counters Data", value: "temp" },
-  // { label: "Strava", value: "strava" },
+  { label: "Eco Counters", value: "temp" },
+   { label: "Strava", value: "strava" },
 ])
 
 export const censusOptions = readable(['2022','2016',"Change"])
@@ -145,6 +147,12 @@ export const metricToggle = derived([visMode,
       if ($modeToggle == "Walking and Cycling") {
         val = "active_counter";
       }
+    }
+
+
+    if ($visMode == "strava") {
+     val = 'strava_counter'
+     
     }
 
     console.log('val:')

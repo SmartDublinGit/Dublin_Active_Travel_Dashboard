@@ -16,6 +16,16 @@
   } from "../../stores/filterData";
   import { RegionID } from "../../stores/region";
 
+let subname = ''
+
+$: {if(['google','census'].includes($visMode))
+{subname='boundary data'}
+else{
+  subname= 'route-based data'
+}
+
+}
+
   // when i change one of the options.
 
   $: if ($metricToggle && $mapStore != null && $metricToggleOptions != null) {
@@ -28,11 +38,15 @@
 <main>
   <Menu />
   <div class="container"  bind:clientWidth={width}>
+
+
+    <div class="dashboard-title">{"Dublin Region Active Travel Dashboard"}</div>
+    <!-- <div class="dashboard-subtitle">{subname}</div> -->
+
     <div class="map-element" >
       <MapComponent selected={$visMode} bind:cmode={$censusMode} bind:dmode={$dataMode} />
       <Sidebar width={width} bind:cmode={$censusMode} bind:dmode={$dataMode} />
     </div>
-    <div class="dashboard-title">{"Dublin Active Travel"}</div>
   </div>
 </main>
 
@@ -44,14 +58,27 @@
 
   .dashboard-title {
     font-family: var(--font-family-sans);
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
     font-style: normal;
     color: #324754;
     font-weight: 300;
     line-height: 125%; /* 45px */
-    position: absolute;
-    top: 10px;
-    left: 20px;
+    padding-top:10px;
+    padding-left: 20px;
+    padding-bottom:5px;
+  }
+
+  .dashboard-subtitle {
+    font-family: 1.2rem;
+    font-size: var(--font-size-1xl);
+    font-style: normal;
+    color: #324754;
+    font-weight: 600;
+    line-height: 125%; /* 45px */
+    padding-top:4px;
+    padding-left: 22px;
+    padding-bottom:10px;
+    text-transform: uppercase;
   }
 
   .container {
@@ -67,7 +94,7 @@
     gap: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 70px;
+    padding-top: 10px;
     padding-bottom: 20px;
   }
 

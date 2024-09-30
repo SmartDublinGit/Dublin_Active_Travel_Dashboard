@@ -39,7 +39,7 @@
 {#if range<99}
 <div class="container open">
     <div class = "inside">
-        <div class = "title" style="text-align: center;">{$metricLabel}</div>
+        <div class = "title" style="text-align: center;">{$metricLabel.split(' ')[0]+' %'}</div>
         <div class = "legend-colors">
             {#each $cols2 as color,i}
             <div class="tick"/>

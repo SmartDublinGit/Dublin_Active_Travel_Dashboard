@@ -15,4 +15,7 @@ export let selected = writable('Census')
 export let jsonData = writable('')
 export let sums = writable('')
 export let sumsGoogle = writable('')
+export let strava_track = writable('DLR')
+export let strava_data = writable('')
+
 

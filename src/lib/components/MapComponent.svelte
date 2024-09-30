@@ -18,9 +18,11 @@
     plotLanes()
   }
 
+
+
   // declare map element
   let mapEl;
-  let width;
+
 
   // on mount, initialize and load map
   onMount(() => {
@@ -38,6 +40,7 @@
 
 
 <div class="toggles">
+  {#if $visMode!='strava'}
   <select class='sel' bind:value={$modeToggle}>
     {#each $modeToggleOptions as question}
       <option value={question}>
@@ -45,8 +48,9 @@
       </option>
     {/each}
   </select>
-  {#if $visMode=='census'}
   <br>
+  {/if}
+  {#if $visMode=='census'}
   <select class='sel' bind:value={cmode}>
     {#each $censusOptions as question}
       <option value={question}>
@@ -62,8 +66,9 @@
       </option>
     {/each}
   </select>
-  {/if}
   <br>
+  {/if}
+
   <label class='check'> {'Show bike lanes '} </label>
     <input
       type="checkbox" class='box' bind:checked={val}
@@ -71,7 +76,7 @@
 
 </div>
 
-  {#if (selected!='temp') }
+  {#if (selected!='temp' && selected !='strava') }
 
 <div class='toggle-box'>
   <div class="legend-box">
@@ -93,7 +98,6 @@ input[type=checkbox] {
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 500;
-    text-indent: 10px;
     color: #324754;
   }
 
@@ -172,11 +176,12 @@ width: 75% !important;
     top: 0px;
     width: calc(100% - 20px);
     background-color: #a7c9de;
-    height: 16px;
+    min-height: 16px;
+    height: fit-content;
     padding-left:10px;
     padding-right:10px;
     padding-top: 5px;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
 
     -moz-border-radius: 0px;
 -webkit-border-radius: 15px 15px 0px 0px;
@@ -189,7 +194,7 @@ border-radius: 15px 15px 0px 0px;     font-size: 1rem;
   .toggles {
     position: absolute;
     left: 20px;
-    top: 50px;
+    top: 70px;
     background-color: #ffffffaa;
     padding:10px;
     border-radius: 15px;
@@ -208,7 +213,6 @@ border-radius: 15px 15px 0px 0px;     font-size: 1rem;
     background: #ffffffbb;
     bottom: 145px;
     border-radius: 15px;
-
   }
 
 

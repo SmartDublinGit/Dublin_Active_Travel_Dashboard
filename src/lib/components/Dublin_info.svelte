@@ -173,23 +173,23 @@
 
   $: walk =
     $RegionID == "999999"
-      ? f2(100 * sums[string_delta+"On foot - Total_pct"+string_16]) + "%"
-      : f2(100 * $RegionID[string_delta+"On foot - Total_pct"+string_16]) + "%";
+      ? f(100 * sums[string_delta+"On foot - Total_pct"+string_16]) + "%"
+      : f(100 * $RegionID[string_delta+"On foot - Total_pct"+string_16]) + "%";
 
   $: cycle =
     $RegionID == "999999"
-    ? f2(100 * sums[string_delta+"Bicycle - Total_pct"+string_16]) + "%"
-    : f2(100 * $RegionID[string_delta+"Bicycle - Total_pct"+string_16]) + "%";
+    ? f(100 * sums[string_delta+"Bicycle - Total_pct"+string_16]) + "%"
+    : f(100 * $RegionID[string_delta+"Bicycle - Total_pct"+string_16]) + "%";
 
   $: prem_deaths_cycle =
     $RegionID == "999999"
       ? f(0.001025 * sums[string_delta+"Bicycle - Total"+string_16])
-      : f2(0.001025 * $RegionID[string_delta+"Bicycle - Total"+string_16]);
+      : f(0.001025 * $RegionID[string_delta+"Bicycle - Total"+string_16]);
 
   $: prem_deaths_walk =
     $RegionID == "999999"
       ? f(0.001025 * sums[string_delta+"On foot - Total"+string_16])
-      : f2(0.001025 * $RegionID[string_delta+"On foot - Total"+string_16]);
+      : f(0.001025 * $RegionID[string_delta+"On foot - Total"+string_16]);
 
   $: cycle_eur_saved =
     $RegionID == "999999"
@@ -225,11 +225,11 @@
   $: traffic_year_foot =
     $RegionID == "999999"
       ? f(0.00990867579908675 * sums[string_delta+"On foot - Total"+string_16])+' years'
-      : f2(0.00990867579908675 * $RegionID[string_delta+"On foot - Total"+string_16])+' years';
+      : f(0.00990867579908675 * $RegionID[string_delta+"On foot - Total"+string_16])+' years';
   $: traffic_year_cycle =
     $RegionID == "999999"
       ? f(0.00990867579908675 * sums[string_delta+"Bicycle - Total"+string_16])+' years'
-      : "" + f2(0.00990867579908675 * $RegionID[string_delta+"Bicycle - Total"+string_16])+' years';
+      : "" + f(0.00990867579908675 * $RegionID[string_delta+"Bicycle - Total"+string_16])+' years';
 
   //source: https://www.census.gov/quickfacts/fact/table/mecklenburgcountynorthcarolina/PST045223
 </script>

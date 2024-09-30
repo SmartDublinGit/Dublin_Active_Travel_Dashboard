@@ -1,7 +1,7 @@
 <script>
   import "../app.css";
   import Dashboard from "$components/Dashboard.svelte";
-  import { stepcounters, jsonData, sums, sumsGoogle } from "../stores/region";
+  import { stepcounters, jsonData, sums, sumsGoogle,strava_data } from "../stores/region";
   import { onMount } from "svelte";
 
   export let data;
@@ -24,6 +24,18 @@
             json_data = await res2.json();
             sums.set(json_data['Census'][0])
             sumsGoogle.set(json_data['Google'][0])
+        } else {
+            console.error("Failed to fetch the second JSON file");
+        }
+
+        const res3 = await fetch('/strava.json');
+        if (res3.ok) {
+            json_data = await res3.json();
+            json_data.forEach(function(d){
+              let times = d['date'].split('/');
+              d.date = new Date(Date.parse(times[2]+'-'+times[1]+'-'+times[0]))
+            })
+            strava_data.set(json_data)
         } else {
             console.error("Failed to fetch the second JSON file");
         }

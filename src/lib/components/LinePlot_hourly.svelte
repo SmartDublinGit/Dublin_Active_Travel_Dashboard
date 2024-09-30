@@ -2,7 +2,6 @@
 
 // draws the line for the time series plots
 
-
 import * as d3 from "d3";
 
   // Receive plot data as prop.
@@ -17,7 +16,6 @@ import * as d3 from "d3";
   export let ttype
   export let width
 
-  import { metricToggle } from "../../stores/filterData";
 
   let st = ''
 
@@ -36,8 +34,6 @@ import * as d3 from "d3";
   }
   }
 
-
- 
   // Create the x (horizontal position) scale.
   $: xScale = d3.scaleLinear(
     [0,23],

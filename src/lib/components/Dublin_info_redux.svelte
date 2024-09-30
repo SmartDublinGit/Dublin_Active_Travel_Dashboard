@@ -59,8 +59,8 @@
 
     if ($RegionID == "999999") {
       txt =
-        'This data shows active travel based on the <a style="font-weight:bold"> Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. Click on a <a style="font-weight:bold;color:#374c80">statistic</a> for information on how it was calculated. ';
-      tit = "this data";
+        'This view shows active travel based on the <a style="font-weight:bold"> Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. Click on a <a style="font-weight:bold;color:#374c80">statistic</a> for information on how it was calculated. ';
+      tit = "this view";
     }
 
     if (sel == "prem_deaths") {
@@ -106,23 +106,23 @@ else{
 
   $: walk =
     $RegionID == "999999"
-      ? f2(100 * $sums[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%"
-      : f2(100 * $RegionID[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%";
+      ? f(100 * $sums[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%"
+      : f(100 * $RegionID[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%";
 
   $: cycle =
     $RegionID == "999999"
-    ? f2(100 * $sums[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%"
-    : f2(100 * $RegionID[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%";
+    ? f(100 * $sums[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%"
+    : f(100 * $RegionID[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%";
 
   $: prem_deaths_cycle =
     $RegionID == "999999"
       ? f(0.001025 * $sums[string_delta+"Bicycle - "+mode+""+string_16])
-      : f2(0.001025 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16]);
+      : f(0.001025 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16]);
 
   $: prem_deaths_walk =
     $RegionID == "999999"
       ? f(0.001025 * $sums[string_delta+"On foot - "+mode+""+string_16])
-      : f2(0.001025 * $RegionID[string_delta+"On foot - "+mode+""+string_16]);
+      : f(0.001025 * $RegionID[string_delta+"On foot - "+mode+""+string_16]);
 
   $: cycle_eur_saved =
     $RegionID == "999999"
@@ -157,11 +157,11 @@ else{
   $: traffic_year_foot =
     $RegionID == "999999"
       ? f(0.00990867579908675 * $sums[string_delta+"On foot - "+mode+""+string_16])
-      : f2(0.00990867579908675 * $RegionID[string_delta+"On foot - "+mode+""+string_16])
+      : f(0.00990867579908675 * $RegionID[string_delta+"On foot - "+mode+""+string_16])
   $: traffic_year_cycle =
     $RegionID == "999999"
       ? f(0.00990867579908675 * $sums[string_delta+"Bicycle - "+mode+""+string_16])
-      : "" + f2(0.00990867579908675 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16])
+      : "" + f(0.00990867579908675 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16])
 
 </script>
 
@@ -170,29 +170,31 @@ else{
   sel = "";
   resetMap();
 }}>
-  <h2 class="dublin-header">{"Regional info: "+$metricLabel}</h2>
+  <h2 class="dublin-header">{"Boundary Statistics by Region"}</h2>
 
-  <div class="flex-items2">
+  <div class="flex-items2" style='gap:0px'>
 
-    <div class="population-box item">
+    <div class="population-box item" style='flex:1 1 50%'>
       {#if location === "Dublin"}
       <div class="text">
-        <p class="label">Region</p>
+        <p class="label" style="font-size:.9rem">{$metricLabel +' Census'}</p>
         <p class="loc">{location}</p>
-        <p class="label"></p>
+        <p class="label">{@html '\xa0'}</p>
       </div>
 
       {:else}
         <div
         class="text" >
-      <p class="label">Region</p>
+        <p class="label" style="font-size:.9rem">{$metricLabel +' Census'}</p>
       <p class="loc">{location}</p>
         <p class="label">{@html '&#9204;'}</p>
+
       </div>
       {/if}
+      
     </div>
 
-    <div class="population-box item">
+    <div class="population-box item" style='flex:1 1 50%'>
       <div
         class="text"
       >
@@ -386,9 +388,9 @@ margin-bottom: 0px;
   }
 
   .loc {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-style: normal;
-    color: #6d8495;
+    color: #374c80;
     font-weight: normal;
     line-height: 120%;
     margin-bottom: 5px;
