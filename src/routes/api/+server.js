@@ -1,5 +1,4 @@
 import { json } from '@sveltejs/kit';
-import {group,rollup,sum,timeDay} from 'd3'
 // import { ECO_COUNTER_API } from "$env/static/private";
 export async function POST({ request }) {
 

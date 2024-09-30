@@ -3,21 +3,14 @@
   export let data
   import {scaleSqrt} from 'd3'
   import { zoomLevelNumber } from "../../stores/map";
-  import {selected_counter,counter_data,counter_name } from "../../stores/region";
+  import {selected_counter,counter_name } from "../../stores/region";
   import {metricToggle} from "../../stores/filterData";
-
-  import {get} from "svelte/store";
 
 
 
 $: rScale = scaleSqrt()
 			.domain([0,50000])
 			.range([$zoomLevelNumber,$zoomLevelNumber*3])
-
-let total = ''
-
-
-
 
 let h = 0
 
