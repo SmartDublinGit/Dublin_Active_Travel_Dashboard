@@ -12,10 +12,6 @@
             range = 99
         }
 
-        console.log('range')
-        console.log(range)
-
-
       }
 
     function formatLabel(d) {
@@ -65,7 +61,6 @@
     .container {
         transition: 100ms ease-in-out;
         width: fit-content;
-        posiion: relative;
     
         border-radius: 20px;
     }

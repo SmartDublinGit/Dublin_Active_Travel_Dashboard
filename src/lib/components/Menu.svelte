@@ -10,7 +10,6 @@
 		visMode.set(d.value);
 	};
 	const toggleExpanded = (_) => (expanded = !expanded);
-
 	const toggleHierarchy1 = (_) => (expandedHierarchy1 = !expandedHierarchy1);
 	const toggleHierarchy2 = (_) => (expandedHierarchy2 = !expandedHierarchy2
 	)
@@ -31,7 +30,7 @@
 			<hr />
 
 			<!-- Hierarchy 1 -->
-			<li>
+		
 				<button on:click={toggleHierarchy1}>
 					<div class='hierarchy'>
 					<span>{expandedHierarchy1 ? '▼' : ''} Boundary</span>
@@ -49,16 +48,12 @@
 						{/each}
 					</ul>
 				{/if}
-			</li>
+		
 
 			<!-- Hierarchy 2 -->
-			<li>
-				<button on:click={toggleHierarchy2}>
-					<div class='hierarchy'>
-						<span>{expandedHierarchy2 ? '▼' : ''} Route-based</span>
-					</div>				</button>
-				{#if expandedHierarchy2}
-					<ul>
+		
+				<div class='hierarchy'>
+				
 						{#each $visModeOptions.slice(2, 4) as d, i}
 							<li
 								on:click={() => setMode(d)}
@@ -67,9 +62,9 @@
 								<span>{d.label}</span>
 							</li>
 						{/each}
-					</ul>
-				{/if}
-			</li>
+			
+				</div>
+	
 
 
 
@@ -95,25 +90,30 @@
 
 	.hierarchy{
 		font-size: 1rem;
-		padding: 0px;
+		padding-bottom: 0px;
 		align-items: start;
 		text-align: left;
 		text-transform: none;
 		font-family: var(--font-family-sans);
-
-
 	}
 
 	ul {
 		list-style: none;
-		padding: 20px;
+		padding-left: 20px;
+		padding-right: 20px;
 		margin: 0;
+		padding-bottom: 0px;
+
 	}
 
 	li {
 		width: 200px;
 		cursor: pointer;
-		padding: 5px;
+		padding: 0px;
+		margin: 0px;
+		padding-top: 15px;
+		padding-left: 6px;
+
 	}
 
 	li :hover {
@@ -122,8 +122,6 @@
 
 	h3 {
 		text-transform: uppercase;
-		padding: 5px;
-		font-size: 1.4rem;
 	}
 
 	hr {
@@ -141,6 +139,8 @@
 		text-anchor: middle;
 		width: 100%;
 		cursor: pointer;
+		padding: none;
+		margin: none;
 	}
 
 	/** Here's all the fading in and out stuff **/

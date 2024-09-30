@@ -6,8 +6,6 @@
   import {selected_counter,counter_name } from "../../stores/region";
   import {metricToggle} from "../../stores/filterData";
 
-
-
 $: rScale = scaleSqrt()
 			.domain([0,50000])
 			.range([$zoomLevelNumber,$zoomLevelNumber*3])
@@ -24,9 +22,6 @@ $:  {
 } 
 
 </script>
-
-
-
 
 <div
   class="marker"
@@ -50,7 +45,5 @@ $:  {
     opacity: 0.7;
   }
 
-  .marker.selected {
-    border: 3px solid white;
-  }
+
 </style>

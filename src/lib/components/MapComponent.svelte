@@ -200,7 +200,6 @@ border-radius: 15px 15px 0px 0px;     font-size: 1rem;
     border-radius: 15px;
     margin: 5px;
     font-size: 1rem;
-
     /* padding: 16px 25px 25px 25px; */
   }
 
@@ -214,7 +213,5 @@ border-radius: 15px 15px 0px 0px;     font-size: 1rem;
     bottom: 145px;
     border-radius: 15px;
   }
-
-
 
 </style>

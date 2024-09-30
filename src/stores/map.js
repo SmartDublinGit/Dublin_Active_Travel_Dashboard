@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { get, writable } from "svelte/store";
-//  import { env } from '$env/dynamic/public';
+import { env } from '$env/dynamic/public';
 
 import { RegionID, fillLayer, stepcounters, showLanes, strava_track } from "./region";
 import { ZoomOut, getCurrentCoords } from "./ZoomOut";
@@ -148,7 +148,7 @@ export function newMapStore(el) {
   });
 
   map = new mapboxgl.Map({
-    accessToken: process.env.PUBLIC_MAPBOX_TOKEN,
+    accessToken: env.PUBLIC_MAPBOX_TOKEN,
     container: el,
     style: "mapbox://styles/mapbox/streets-v12",
     bounds: geoBbox,

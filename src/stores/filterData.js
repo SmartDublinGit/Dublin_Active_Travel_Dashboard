@@ -49,8 +49,8 @@ export const modeToggleOptions = readable(['Walking', 'Cycling', 'Walking and Cy
 export const visModeOptions = readable([
   { label: "Census", value: "census" },
   { label: "Google Trips", value: "google" },
-  { label: "Eco Counters", value: "temp" },
-   { label: "Strava", value: "strava" },
+  { label: "Locations", value: "temp" },
+   { label: "Route", value: "strava" },
 ])
 
 export const censusOptions = readable(['2022','2016',"Change"])

@@ -20,8 +20,7 @@
 
   console.log(plot_type)
 
-  
-  $: {if(plot_type=='3 months'){
+  $: {if(plot_type=='By month (average)'){
     formatTime=d3.utcFormat("%b")}
     else{
       formatTime=d3.utcFormat("%b '%y")}}
@@ -110,7 +109,7 @@
         x2={width - marginRight}
       />
 
-      {#each xScale.ticks(5) as tick}
+      {#each xScale.ticks(4) as tick}
         <!-- X-Axis Ticks -->
         <line
           stroke="currentColor"

@@ -2,6 +2,8 @@
   import Sidebar from "./Sidebar.svelte";
   import MapComponent from "./MapComponent.svelte";
   import Menu from "./Menu.svelte";
+  import img from '$lib/images/Smart-Dublin-Large.png';
+
 
   let width = 0;
 
@@ -12,7 +14,6 @@
     visMode,
     censusMode,
     dataMode
-    
   } from "../../stores/filterData";
   import { RegionID } from "../../stores/region";
 
@@ -38,11 +39,8 @@ else{
 <main>
   <Menu />
   <div class="container"  bind:clientWidth={width}>
-
-
     <div class="dashboard-title">{"Dublin Region Active Travel Dashboard"}</div>
-    <!-- <div class="dashboard-subtitle">{subname}</div> -->
-
+    <img class = 'img' src={img} alt="my image" />
     <div class="map-element" >
       <MapComponent selected={$visMode} bind:cmode={$censusMode} bind:dmode={$dataMode} />
       <Sidebar width={width} bind:cmode={$censusMode} bind:dmode={$dataMode} />
@@ -51,6 +49,14 @@ else{
 </main>
 
 <style>
+
+.img{
+  position: absolute;
+  width: 100px;
+  top: 10px;
+  right: 0px
+}
+
   main {
     display: grid;
     grid-template: "nav content" min-content;
@@ -66,20 +72,9 @@ else{
     padding-top:10px;
     padding-left: 20px;
     padding-bottom:5px;
+    width: calc(100% - 120px);
   }
 
-  .dashboard-subtitle {
-    font-family: 1.2rem;
-    font-size: var(--font-size-1xl);
-    font-style: normal;
-    color: #324754;
-    font-weight: 600;
-    line-height: 125%; /* 45px */
-    padding-top:4px;
-    padding-left: 22px;
-    padding-bottom:10px;
-    text-transform: uppercase;
-  }
 
   .container {
     width: 100%;

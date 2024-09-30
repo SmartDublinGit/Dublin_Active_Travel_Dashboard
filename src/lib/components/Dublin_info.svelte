@@ -1,9 +1,11 @@
 <script>
   // right hand side if we are looking at census data
 
-  import { RegionID,censusMode} from "../../stores/region";
+  import { RegionID,censusMode,jsonData,sums} from "../../stores/region";
   import { format } from "d3";
   import { resetMap } from "../../stores/map";
+  import { metricLabel } from "../../stores/filterData";
+  import { get } from 'svelte/store'
 
   import Fa from "svelte-fa";
   import {
@@ -21,124 +23,43 @@
 
   let f2 = format(".2f");
 
-  let sums = 
-  {
-        "OBJECTID": 584222,
-        "ED_PART_COUNT": 341,
-        "COUNTY_CODE": 982,
-        "Total": 1458154,
-        "On foot - Total": 180789,
-        "Bicycle - Total": 64387,
-        "Bus, minibus or coach - Total": 127159,
-        "Train, DART or LUAS - Total": 61401,
-        "Motorcycle or scooter - Total": 5118,
-        "Car driver - Total": 272279,
-        "Car passenger - Total": 124443,
-        "Van - Total": 21137,
-        "Other (incl. lorry) - Total": 1837,
-        "Work mainly at or from home - Total": 89359,
-        "Not stated - Total": 98530,
-        "MATCH": "                                                                                                                                                                                                                                                                                                                                 ",
-        "ID": 51360,
-        "working_pop": 1046439,
-        "Active travel - Total": 245176,
-        "On foot - Total_pct": 0.1239,
-        "Bicycle - Total_pct": 0.04416,
-        "Bus, minibus or coach - Total_pct": 39.1620534569,
-        "Train, DART or LUAS - Total_pct": 18.9045410003,
-        "Motorcycle or scooter - Total_pct": 1.6676440801,
-        "Car driver - Total_pct": 80.3233413896,
-        "Car passenger - Total_pct": 35.7256174189,
-        "Van - Total_pct": 6.339314168,
-        "Other (incl. lorry) - Total_pct": 0.5685506475,
-        "Work mainly at or from home - Total_pct": 28.3701634564,
-        "Not stated - Total_pct": 30.4378292711,
-        "Active travel - Total_pct": 79.5009451113,
-        "Total_16": 1430550,
-        "On foot - Total_16": 176948,
-        "Bicycle - Total_16": 57987,
-        "Bus, minibus or coach - Total_16": 131253,
-        "Train, DART or LUAS - Total_16": 64887,
-        "Motorcycle or scooter - Total_16": 4816,
-        "Car driver - Total_16": 303859,
-        "Car passenger - Total_16": 112730,
-        "Van - Total_16": 20058,
-        "Other (incl. lorry) - Total_16": 1305,
-        "Work mainly at or from home - Total_16": 15679,
-        "Not stated - Total_16": 55240,
-        "working_pop_16": 944762,
-        "Active travel - Total_16": 234935,
-        "On foot - Total_pct_16": 0.1236922862,
-        "Bicycle - Total_pct_16": 0.04053,
-        "Bus, minibus or coach - Total_pct_16": 46.003993782,
-        "Train, DART or LUAS - Total_pct_16": 22.0224854975,
-        "Motorcycle or scooter - Total_pct_16": 1.7140147825,
-        "Car driver - Total_pct_16": 97.9294522262,
-        "Car passenger - Total_pct_16": 35.6521318555,
-        "Van - Total_pct_16": 6.6092321297,
-        "Other (incl. lorry) - Total_pct_16": 0.4398650466,
-        "Work mainly at or from home - Total_pct_16": 5.9825854204,
-        "Not stated - Total_pct_16": 18.7587536144,
-        "Active travel - Total_pct_16": 85.8874856451,
-        "delta_Total": 27604,
-        "delta_On foot - Total": 3841,
-        "delta_On foot - Total_pct": 0.0023652276,
-        "delta_Bicycle - Total": 6400,
-        "delta_Bicycle - Total_pct": 0.089349398,
-        "delta_Bus, minibus or coach - Total": -4094,
-        "delta_Bus, minibus or coach - Total_pct": -39.6620956741,
-        "delta_Train, DART or LUAS - Total": -3486,
-        "delta_Train, DART or LUAS - Total_pct": null,
-        "delta_Motorcycle or scooter - Total": 302,
-        "delta_Motorcycle or scooter - Total_pct": null,
-        "delta_Car driver - Total": -31580,
-        "delta_Car driver - Total_pct": -59.5727221051,
-        "delta_Car passenger - Total": 11713,
-        "delta_Car passenger - Total_pct": -1.4288461979,
-        "delta_Van - Total": 1079,
-        "delta_Van - Total_pct": -9.9868920958,
-        "delta_Other (incl. lorry) - Total": 532,
-        "delta_Other (incl. lorry) - Total_pct": null,
-        "delta_Work mainly at or from home - Total": 73680,
-        "delta_Work mainly at or from home - Total_pct": 1620.5557982056,
-        "delta_Not stated - Total": 43290,
-        "delta_Not stated - Total_pct": 215.7820047281,
-        "delta_Active travel - Total": 10241,
-        "delta_Active travel - Total_pct": -7.1638158832
-    }
+  export let cmode;
+  export let dmode;
 
 
   let txt = "";
   let tit = "";
-
   let string_16 = ''
   let string_delta = ''
-  
+
+  $:{console.log(cmode)
+    console.log(dmode)
+    console.log('summzzz')
+   console.log($sums)
+  }
+
 
   $: {
 
     // code to determine what data i am looking at.
 
-    if($censusMode=="2016"){
+    if(cmode=="2016"){
       string_16='_16'
     }
     else{
       string_16=''
     }
 
-    if($censusMode=="delta"){
+    if(cmode=="Change"){
       string_delta='delta_'
     }
     else{
       string_delta=''
     }
 
-
-
-
     if ($RegionID == "999999") {
       txt =
-        'This view shows active travel based on the <a style="font-weight:bold"> Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. Click on a <a style="font-weight:bold;color:#374c80">statistic</a> for information on how it was calculated. ';
+        'This view shows the <a href="https://www.cso.ie/en/releasesandpublications/ep/p-cpp7/census2022profile7-employmentoccupationsandcommuting/commutingtowork/" > Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. Click on a <a style="font-weight:bold;color:#6d8495">statistic</a> for information on how it was calculated. ';
       tit = "this view";
     }
 
@@ -168,134 +89,143 @@
   }
 
 
+  let location = 'Dublin';
 
-  $: location = $RegionID == "999999" ? "DUBLIN" : $RegionID.ED_ENGLISH;
+  let mode
+
+  $: {if(dmode=='School or College'){
+    mode='School, college or childcare'
+  }
+else{
+  mode=dmode
+}
+}
+
+
+  $: location = $RegionID == "999999" ? "Dublin" : $RegionID.ED_ENGLISH;
 
   $: walk =
     $RegionID == "999999"
-      ? f(100 * sums[string_delta+"On foot - Total_pct"+string_16]) + "%"
-      : f(100 * $RegionID[string_delta+"On foot - Total_pct"+string_16]) + "%";
+      ? f(100 * $sums[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%"
+      : f(100 * $RegionID[string_delta+"On foot - "+mode+"_pct"+string_16]) + "%";
 
   $: cycle =
     $RegionID == "999999"
-    ? f(100 * sums[string_delta+"Bicycle - Total_pct"+string_16]) + "%"
-    : f(100 * $RegionID[string_delta+"Bicycle - Total_pct"+string_16]) + "%";
+    ? f(100 * $sums[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%"
+    : f(100 * $RegionID[string_delta+"Bicycle - "+mode+"_pct"+string_16]) + "%";
 
   $: prem_deaths_cycle =
     $RegionID == "999999"
-      ? f(0.001025 * sums[string_delta+"Bicycle - Total"+string_16])
-      : f(0.001025 * $RegionID[string_delta+"Bicycle - Total"+string_16]);
+      ? f(0.001025 * $sums[string_delta+"Bicycle - "+mode+""+string_16])
+      : f(0.001025 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16]);
 
   $: prem_deaths_walk =
     $RegionID == "999999"
-      ? f(0.001025 * sums[string_delta+"On foot - Total"+string_16])
-      : f(0.001025 * $RegionID[string_delta+"On foot - Total"+string_16]);
+      ? f(0.001025 * $sums[string_delta+"On foot - "+mode+""+string_16])
+      : f(0.001025 * $RegionID[string_delta+"On foot - "+mode+""+string_16]);
 
   $: cycle_eur_saved =
     $RegionID == "999999"
       ? "€" +
-        f(401.45*sums[string_delta+"Bicycle - Total"+string_16]/1000000) + 'M'
+        f(401.45*$sums[string_delta+"Bicycle - "+mode+""+string_16]/1000000) +'m ' 
       : "€" +
-      f(401.45*($RegionID[string_delta+"Bicycle - Total"+string_16]));
-
+      f(401.45*($RegionID[string_delta+"Bicycle - "+mode+""+string_16]));
 
   $: walk_eur_saved =
   $RegionID == "999999"
       ? "€" +
-        f(401.45*sums[string_delta+"On foot - Total"+string_16]/1000000) + 'M'
+        f(401.45*$sums[string_delta+"On foot - "+mode+""+string_16]/1000000) +'m '  
       : "€" +
-      f(401.45*($RegionID[string_delta+"On foot - Total"+string_16]));
+      f(401.45*($RegionID[string_delta+"On foot - "+mode+""+string_16]));
   
 
   $: co2_saved_year =
     $RegionID == "999999"
-      ? f((0.3372) * sums[string_delta+"On foot - Total"+string_16])
+      ? f((0.3372) * $sums[string_delta+"On foot - "+mode+""+string_16])
       : f(
-          (0.3372) * $RegionID[string_delta+"On foot - Total"+string_16]
+          (0.3372) * $RegionID[string_delta+"On foot - "+mode+""+string_16]
         );
 
 
   $: co2_saved_year_bike =
     $RegionID == "999999"
-      ? f((0.3372) * sums[string_delta+"Bicycle - Total"+string_16])
+      ? f((0.3372) * $sums[string_delta+"Bicycle - "+mode+""+string_16])
       : f(
-          (0.3372) * $RegionID[string_delta+"Bicycle - Total"+string_16]
+          (0.3372) * $RegionID[string_delta+"Bicycle - "+mode+""+string_16]
         );
 
   $: traffic_year_foot =
     $RegionID == "999999"
-      ? f(0.00990867579908675 * sums[string_delta+"On foot - Total"+string_16])+' years'
-      : f(0.00990867579908675 * $RegionID[string_delta+"On foot - Total"+string_16])+' years';
+      ? f(0.00990867579908675 * $sums[string_delta+"On foot - "+mode+""+string_16])
+      : f(0.00990867579908675 * $RegionID[string_delta+"On foot - "+mode+""+string_16])
   $: traffic_year_cycle =
     $RegionID == "999999"
-      ? f(0.00990867579908675 * sums[string_delta+"Bicycle - Total"+string_16])+' years'
-      : "" + f(0.00990867579908675 * $RegionID[string_delta+"Bicycle - Total"+string_16])+' years';
+      ? f(0.00990867579908675 * $sums[string_delta+"Bicycle - "+mode+""+string_16])
+      : "" + f(0.00990867579908675 * $RegionID[string_delta+"Bicycle - "+mode+""+string_16])
 
-  //source: https://www.census.gov/quickfacts/fact/table/mecklenburgcountynorthcarolina/PST045223
 </script>
 
 <div class='container'>
-<div class="overall">
-  <div class="flex-items">
-    <div class="population-box item">
-      {#if location != "Dublin"}
-        <div
-          class="text"
-          on:click={function () {
-            sel = "";
-            resetMap();
-          }}
-        >
-          <h2 class="dublin-header">{location}</h2>
+<div class="overall2" on:click={function () {
+  sel = "";
+  resetMap();
+}}>
+  <h2 class="dublin-header">{"Boundary Statistics by Region"}</h2>
 
-          <p class="label">Go back</p>
-        </div>
+  <div class="flex-items2" style='gap:0px'>
+
+    <div class="population-box item" style='flex:1 1 50%'>
+      {#if location === "Dublin"}
+      <div class="text">
+        <p class="label" style="font-size:.9rem">{$metricLabel +' Census'}</p>
+        <p class="loc">{location}</p>
+        <p class="label">{@html '\xa0'}</p>
+      </div>
+
       {:else}
-        <div class="text">
-          <h2 class="dublin-header">Dublin</h2>
-          <p class="label">{@html "\xa0"}</p>
-        </div>
+        <div
+        class="text" >
+        <p class="label" style="font-size:.9rem">{$metricLabel +' Census'}</p>
+      <p class="loc">{location}</p>
+        <p class="label">{@html '&#9204;'}</p>
+
+      </div>
       {/if}
+      
     </div>
 
-    <div class="population-box item">
+    <div class="population-box item" style='flex:1 1 50%'>
       <div
         class="text"
-        on:click={function () {
-          sel = "health_exp";
-        }}
       >
         <p class="label">Commuters</p>
-        <p class="number">{cycle} <Fa icon={faBicycle} /></p>
-        <p class="number">{walk} <Fa icon={faPersonWalking} /></p>
+        <p class="number-green">{cycle + ' '}<span style='font-size:1.2rem'> <Fa icon={faBicycle} /></span></p>
+        <p class="number">{walk+ ' '}<span style='font-size:1.2rem'> <Fa icon={faPersonWalking} /></span></p>
       </div>
     </div>
 
 
   </div>
+
 </div>
 
 
 
 <div class="flex-items2">
-  <div class="overall2">
-  
-
+  <div class="overall2" style="background-color:{sel=='prem_deaths'?"#a7c9de44":"white"}" on:click={function () {
+    sel = "prem_deaths";
+    resetMap();
+  }}>
     <h2 class="dublin-header"><Fa icon={faHeartPulse} /> Health</h2>
     <div class="flex-items">
       <div class="population-box item">
         <div
           class="text"
-          on:click={function () {
-            sel = "prem_deaths";
-          }}
+       
         >
           <p class="label">Annual premature deaths avoided</p>
-          <p class="number">
-            {prem_deaths_cycle}
-            <Fa icon={faBicycle} style="color:black" />
-          </p>
-          <p class="number">{prem_deaths_walk} <Fa icon={faPersonWalking} /></p>
+          <p class="number-green">{prem_deaths_cycle + ' '}<span style='font-size:1.2rem'> <Fa icon={faBicycle} /></span></p>
+          <p class="number">{prem_deaths_walk + ' '}<span style='font-size:1.2rem'> <Fa icon={faPersonWalking} /></span></p>
         </div>
       </div>
       </div>
@@ -303,93 +233,51 @@
    
   </div>
 
-  <div class="overall2">
+  <div class="overall2" style="background-color:{sel=='health_exp'?"#a7c9de44":"white"}" on:click={function () {
+    sel = "health_exp";
+    resetMap();
+  }}>
     <h2 class="dublin-header"><Fa icon={faEuroSign} /> Financial</h2>
     <div
     class="text"
-    on:click={function () {
-      sel = "health_exp";
-    }}
   >
-    <p class="label">Annual fuel savings</p>
-    <p class="number">{cycle_eur_saved} <Fa icon={faBicycle} /></p>
-    <p class="number">{walk_eur_saved} <Fa icon={faPersonWalking} /></p>
+    <p class="label">Annual money saved on fuel</p>
+    <p class="number-green">{cycle_eur_saved+ ' '}<span style='font-size:1.2rem'><Fa icon={faBicycle} /></span></p>
+    <p class="number">{walk_eur_saved+' '}<span style='font-size:1.2rem'><Fa icon={faPersonWalking} /></span></p>
   </div>
   </div>
 </div>
 
-
-
-
-
-
-<!-- 
-<div class="overall">
-  <h2 class="dublin-header"><Fa icon={faHeartPulse} /> Health</h2>
-  <div class="flex-items">
-    <div class="population-box item">
-      <div
-        class="text"
-        on:click={function () {
-          sel = "prem_deaths";
-        }}
-      >
-        <p class="label">Annual premature deaths avoided</p>
-        <p class="number">
-          {prem_deaths_cycle}
-          <Fa icon={faBicycle} style="color:black" />
-        </p>
-        <p class="number">{prem_deaths_walk} <Fa icon={faPersonWalking} /></p>
-      </div>
-    </div>
-
- <div class="population-box item">
-      <div
-        class="text"
-        on:click={function () {
-          sel = "health_exp";
-        }}
-      >
-        <p class="label">Annual fuel savings</p>
-        <p class="number">{cycle_eur_saved} <Fa icon={faBicycle} /></p>
-        <p class="number">{walk_eur_saved} <Fa icon={faPersonWalking} /></p>
-      </div>
-    </div> 
-
-  </div>
-</div> -->
-
 <div class="flex-items2">
-  <div class="overall2">
-    <h2 class="dublin-header"><Fa icon={faSmog} /> CO<sub>2</sub></h2>
+  <div class="overall2" style="background-color:{sel=='co2'?"#a7c9de44":"white"}" on:click={function () {
+    sel = "co2";
+    resetMap();
+  }}>
+    <h2 class="dublin-header"><Fa icon={faSmog} /> CO2</h2>
     <div
       class="text"
-      on:click={function () {
-        sel = "co2";
-      }}
     >
-      <p class="label">Annual CO<sub>2</sub> saved (Tonnes)</p>
-      <p class="number">{co2_saved_year_bike} <Fa icon={faBicycle} /></p>
-      <p class="number">{co2_saved_year} <Fa icon={faPersonWalking} /></p>
+      <p class="label">Annual CO2 saved (Tonnes)</p>
+      <p class="number-green">{co2_saved_year_bike + ' '}<span style='font-size:1.2rem'> <Fa icon={faBicycle} /></span></p>
+      <p class="number">{co2_saved_year + ' '}<span style='font-size:1.2rem'> <Fa icon={faPersonWalking} /></span></p>
     </div>
   </div>
 
-  <div class="overall2">
+  <div class="overall2" style="background-color:{sel=='cong'?"#a7c9de44":"white"}" on:click={function () {
+    sel = "cong";
+  }}>
     <h2 class="dublin-header"><Fa icon={faCarSide} /> Congestion</h2>
     <div
       class="text"
-      on:click={function () {
-        sel = "cong";
-      }}
     >
-      <p class="label">Annual time savings </p>
-      <p class="number">{traffic_year_cycle} <Fa icon={faBicycle} /></p>
-      <p class="number">{traffic_year_foot} <Fa icon={faPersonWalking} /></p>
+      <p class="label">Annual time savings (years) </p>
+      <p class="number-green">{traffic_year_cycle + ' '}<span style='font-size:1.2rem'> <Fa icon={faBicycle} /></span></p>
+      <p class="number">{traffic_year_foot + ' '}<span style='font-size:1.2rem'> <Fa icon={faPersonWalking} /></span></p>
     </div>
   </div>
 </div>
 
-<div class="overall">
+<div class="overall2">
   <div class="text2">
     <h2 class="dublin-header">{"About " + tit}</h2>
     <div class="number2">{@html txt}</div>
@@ -402,24 +290,32 @@
 
 .container{
   height: 100svh;
+  min-height: 100svh;
 }
 
   .overall {
     border: 0px solid #f5f5f5;
     background: white;
-    border-radius: 30px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0);
-    padding: 18px 18px;
-    margin-bottom: 10px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    padding: 18px;
+    margin-bottom: 20px;
   }
 
   .dublin-header {
-    font-size: 20px;
+    font-size: 1.2rem;
     font-style: normal;
-    font-weight: 700;
-    line-height: 125%;
-    margin-bottom: 10px;
+    font-weight: 500;
+    background-color: #a7c9de; 
+    padding: 5px 0px 5px 5px;
+    -moz-border-radius: 0px;
+-webkit-border-radius: 15px 15px 0px 0px;
+border-radius: 15px 15px 0px 0px; 
+    text-indent: 10px;
+    color: #324754;
   }
+
+ 
 
   .flex-items {
     display: flex;
@@ -428,19 +324,20 @@
 
   .flex-items2 {
     display: flex;
-    gap: 10px;
+    gap: 20px;
   }
 
   .overall2 {
-    border: 0px solid #f5f5f5;
     background: white;
     width: 100%;
-    height: 100%;
-    border-radius: 30px;
+    border-radius: 15px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0);
-    padding: 18px 18px;
-    margin-bottom: 10px;
+    padding-bottom: 2px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    
   }
+
 
   .item {
     display: flex;
@@ -448,49 +345,66 @@
     gap: 6px;
   }
 
-  .icon {
-    flex: 0 1 30px;
-    width: 32px;
-    height: 32px;
-    margin-top: 6px;
-  }
-
   .text {
     flex: 0 1 auto;
     text-transform: uppercase;
-    cursor: pointer;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+margin-bottom: 0px;
   }
 
   .text2 {
     flex: 0 1 auto;
-    cursor: pointer;
+  }
+
+  .number-green {
+    font-size: 1.5rem;
+    font-style: normal;
+    text-transform: none;
+    font-weight: 400;
+    line-height: 137.5%; /* 41.25px */
+    margin-bottom: 0;
+    color: #955196;
   }
 
   .number {
-    font-size: 20px;
+    font-size: 1.5rem;
     font-style: normal;
     text-transform: none;
-
-    font-weight: 300;
+    font-weight: 400;
     line-height: 137.5%; /* 41.25px */
     margin-bottom: 0;
+    color: #374c80
   }
 
   .number2 {
-    font-size: 16px;
-    font-style: normal;
+    font-size: 1rem;
+    font-style: 300px;
     font-weight: 300;
     line-height: 137.5%; /* 41.25px */
     margin-bottom: 0;
+    padding: 15px;
+  }
+
+  .loc {
+    font-size: 1.2rem;
+    font-style: normal;
+    color: #374c80;
+    font-weight: normal;
+    line-height: 120%;
+    margin-bottom: 5px;
   }
 
   .label {
-    font-size: 14px;
+    font-size: .9rem;
     font-style: normal;
-    color: #374c80;
+    color: #6d8495;
     font-weight: 700;
-    line-height: 150%; /* 24px */
-    margin-bottom: 0;
+    line-height: 130%; /* 24px */
+    margin-bottom: 6px;
+    margin-top: 2px;
+
   }
 
   @media screen and (max-width: 450px) {
@@ -507,7 +421,6 @@
     .label {
       font-size: 1px;
       line-height: 150%; /* 24px */
-      cursor: pointer;
     }
     .flex-items {
       flex-direction: column;

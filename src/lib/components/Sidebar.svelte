@@ -1,8 +1,8 @@
 <script>
-  import Dublin_info_redux from "./Dublin_info_redux.svelte";
-  import Dublin_district_info_redux from "./Dublin_district_info_redux.svelte";
-  import Dublin_counters_info_redux from "./Dublin_counters_info_redux.svelte";
-  import Dublin_strava_info_redux from "./Dublin_strava_info_redux.svelte";
+  import Dublin_info from "./Dublin_info.svelte";
+  import Dublin_district_info from "./Dublin_district_info.svelte";
+  import Dublin_counters_info from "./Dublin_counters_info.svelte";
+  import Dublin_strava_info from "./Dublin_strava_info.svelte";
 
   import { visMode } from "../../stores/filterData";
   
@@ -11,16 +11,15 @@
   export let width
 </script>
 
-
 <div class="map-info">
   {#if $visMode == "census"}
-    <Dublin_info_redux bind:cmode={cmode} bind:dmode={dmode}/>
+    <Dublin_info bind:cmode={cmode} bind:dmode={dmode}/>
   {:else if $visMode == "google"}
-    <Dublin_district_info_redux />
+    <Dublin_district_info />
     {:else if $visMode == "strava"}
-    <Dublin_strava_info_redux width={width}  />
+    <Dublin_strava_info width={width}  />
   {:else}
-    <Dublin_counters_info_redux width={width} />
+    <Dublin_counters_info width={width} />
   {/if}
 </div>
 
