@@ -32,11 +32,7 @@
   let string_16 = ''
   let string_delta = ''
 
-  $:{console.log(cmode)
-    console.log(dmode)
-    console.log('summzzz')
-   console.log($sums)
-  }
+
 
 
   $: {

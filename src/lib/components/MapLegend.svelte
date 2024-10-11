@@ -88,14 +88,13 @@
     .square {
       flex: 1 0 auto;
       height: 15px;
-      border-color: #696969;
-      border-width: .5px 0px .5px 0px;
+      border-width: 0;
       border-style: solid;
       opacity: .8;
     }
     .tick{
       width: 0px;
-      height: 23px;
+      height: 0px;
       border-left: 1px solid #696969;
     }
 
@@ -109,7 +108,7 @@
     .label {
       position: absolute;
       transform: translate(-50%, 0);
-      line-height: 130%;
+      line-height: 180%;
     }
     .label:first-child {
       transform: translate(0, 0);

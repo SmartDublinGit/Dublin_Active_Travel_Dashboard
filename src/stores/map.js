@@ -1,9 +1,9 @@
 import mapboxgl from "mapbox-gl";
 import { get, writable } from "svelte/store";
-import { env } from '$env/dynamic/public';
+// import { env } from '$env/dynamic/public';
 
 import { RegionID, fillLayer, stepcounters, showLanes, strava_track } from "./region";
-import { ZoomOut, getCurrentCoords } from "./ZoomOut";
+import { getCurrentCoords } from "./getCoords";
 import { metricToggle } from "./filterData"
 
 import MapMarker from "../lib/components/MapMarker.svelte";
@@ -139,16 +139,10 @@ export function newMapStore(el) {
 
   fillLayer.set("map-layer-" + layer);
 
-  const zoomOut = new ZoomOut({
-    className: "fit-bounds-button",
-    title: "Go back to Dublin",
-    eventHandler: () => {
-      resetMap();
-    },
-  });
+
 
   map = new mapboxgl.Map({
-    accessToken: env.PUBLIC_MAPBOX_TOKEN,
+    accessToken: process.env.PUBLIC_MAPBOX_TOKEN,
     container: el,
     style: "mapbox://styles/mapbox/streets-v12",
     bounds: geoBbox,
@@ -160,7 +154,6 @@ export function newMapStore(el) {
     fitBoundsOptions: { padding: 120 },
   })
     .addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right")
-    .addControl(zoomOut, "bottom-right");
 
   return {
     // return map object
@@ -423,10 +416,7 @@ export function newMapStore(el) {
           }
         });
 
-
-
         let counters = get(stepcounters)
-        console.log(counters)
 
         counters.map((marker_data) => {
           let mark = document.createElement("div"); //make a markers only div 
@@ -511,7 +501,6 @@ export function newMapStore(el) {
 
           map.resize()
           let currentCoords = getCurrentCoords(map);
-          zoomOut.show();
 
           currentCoords = getCurrentCoords(map);
           zoomLevelNumber.set(currentCoords.zoom);
@@ -625,8 +614,6 @@ export function newMapStore(el) {
     },
   };
 }
-
-
 
 export function resetMap() {
   RegionID.set('999999');

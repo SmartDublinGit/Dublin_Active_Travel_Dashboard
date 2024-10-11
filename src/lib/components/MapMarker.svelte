@@ -8,7 +8,7 @@
 
 $: rScale = scaleSqrt()
 			.domain([0,50000])
-			.range([$zoomLevelNumber,$zoomLevelNumber*3])
+			.range([$zoomLevelNumber,$zoomLevelNumber*4])
 
 let h = 0
 

@@ -18,7 +18,6 @@
 
   let formatTime
 
-  console.log(plot_type)
 
   $: {if(plot_type=='By month (average)'){
     formatTime=d3.utcFormat("%b")}
@@ -43,10 +42,7 @@
     }
   }
 
-  $: {
-    console.log("width");
-    console.log(width);
-  }
+
 
   let xScale;
 

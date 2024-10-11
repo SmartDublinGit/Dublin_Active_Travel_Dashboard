@@ -14,6 +14,11 @@
         const res = await fetch('/census_data_total.json');
         if (res.ok) {
             json_data = await res.json();
+
+    
+
+
+
             jsonData.set(json_data['features'])
         } else {
             console.error("Failed to fetch the JSON file");
@@ -53,7 +58,6 @@
     //start by getting all of our counters data through the API.
 
     if (data.traffic) {
-      console.log(data);
       data["traffic"].forEach((element) => {
         if (element.value) {
           let tmp = data["sites"].filter(function (d) {
@@ -68,7 +72,8 @@
             id: tmp.id,
           };
 
-          filteredData.push(tmp2);
+          if (![100063162,100063165].includes(tmp.id))
+          {filteredData.push(tmp2);}
         }
       });
     }

@@ -45,7 +45,6 @@
     summary[month].occurrences += 1;
   });
 
-  console.log(summary)
 
   // Convert summary object to an array with date objects as keys and calculate average counts
   const result = Object.values(summary).map(item => ({
@@ -91,7 +90,6 @@ function getLastNMonths(data, numMonths) {
     $: {
         c = []
 
-        console.log($strava_data)
         if($strava_track=='Dodder'){
             routeName = 'Dodder Greenway'
         }
@@ -124,22 +122,18 @@ function getLastNMonths(data, numMonths) {
         if (counterMode =="By month (average)")
 
        { 
-        console.log(c)
         c = summarizeAverageByMonthAsDate(c)
-        console.log(c)
 
        }
 
        if (counterMode == "By week (last 3 months)")
        {
         c = getLastNMonths(c,3)
-        console.log(c)
        }
 
        if (counterMode == "By week (last year)")
        {
         c = getLastNMonths(c,12)
-        console.log(c)
        }
 
     }

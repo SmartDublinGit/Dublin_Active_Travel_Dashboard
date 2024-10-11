@@ -40,7 +40,9 @@ else{
   <Menu />
   <div class="container"  bind:clientWidth={width}>
     <div class="dashboard-title">{"Dublin Region Active Travel Dashboard"}</div>
+    <a href="https://smartdublin.ie/" target='_blank'>
     <img class = 'img' src={img} alt="my image" />
+    </a>
     <div class="map-element" >
       <MapComponent selected={$visMode} bind:cmode={$censusMode} bind:dmode={$dataMode} />
       <Sidebar width={width} bind:cmode={$censusMode} bind:dmode={$dataMode} />
@@ -52,8 +54,8 @@ else{
 
 .img{
   position: absolute;
-  width: 100px;
-  top: 10px;
+  width: 150px;
+  top: 7px;
   right: 0px
 }
 
@@ -64,15 +66,15 @@ else{
 
   .dashboard-title {
     font-family: var(--font-family-sans);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     font-style: normal;
     color: #324754;
     font-weight: 300;
     line-height: 125%; /* 45px */
     padding-top:10px;
     padding-left: 20px;
-    padding-bottom:5px;
-    width: calc(100% - 120px);
+    padding-bottom:0px;
+    width: calc(100% - 160px);
   }
 
 
@@ -89,13 +91,17 @@ else{
     gap: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 10px;
+    padding-top: 20px;
     padding-bottom: 20px;
   }
 
   @media screen and (max-width: 768px) {
     .map-element {
       flex-direction: column;
+    }
+
+    .img{
+      width: 110px;
     }
 
   .dashboard-title {

@@ -82,8 +82,7 @@ export const metricToggle = derived([visMode,
   let val = ''
 
   let this_st = 'Total'
-  console.log('data mode')
-  console.log($dataMode)
+
 
 
     if ($dataMode=='School or College')
@@ -155,8 +154,7 @@ export const metricToggle = derived([visMode,
      
     }
 
-    console.log('val:')
-    console.log(val)
+ 
 
     return val
   
