@@ -74,7 +74,7 @@ else{
     padding-top:10px;
     padding-left: 20px;
     padding-bottom:0px;
-    width: calc(100% - 160px);
+    width: calc(100% - 16§0px);
   }
 
 

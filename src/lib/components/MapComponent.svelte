@@ -111,6 +111,7 @@ input[type=checkbox] {
     background-color: #ffffffdd;
     font-size: .9rem;
     margin-bottom: 6px;
+    color: #324754;
   }
 
 

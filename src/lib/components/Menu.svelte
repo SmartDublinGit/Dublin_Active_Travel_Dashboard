@@ -1,6 +1,6 @@
 <script>
 
-import img from '$lib/images/newlogo.svg';
+import img from '$lib/images/db3.png';
 
 	let expanded = false;
 	let expandedHierarchy1 = true;
