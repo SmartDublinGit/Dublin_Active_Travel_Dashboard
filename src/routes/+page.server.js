@@ -1,5 +1,5 @@
 
-// import { ECO_COUNTER_API } from "$env/static/private";
+import { ECO_COUNTER_API } from "$env/static/private";
 
 export async function load({params}){
 

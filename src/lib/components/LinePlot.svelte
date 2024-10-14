@@ -1,6 +1,5 @@
 <script>
   // draws the line for the time series plots
-
   import * as d3 from "d3";
 
   // Receive plot data as prop.
@@ -18,7 +17,6 @@
 
   let formatTime
 
-
   $: {if(plot_type=='By month (average)'){
     formatTime=d3.utcFormat("%b")}
     else{
@@ -29,8 +27,7 @@
   let color = "";
   let st = "";
 
-  let line
-
+  let line, area;
 
   $: {
     if (ttype == "pedestrian") {
@@ -42,13 +39,7 @@
     }
   }
 
-
-
   let xScale;
-
-
-
-
 
   $: {
     if (plot_type == "By hour (last 30 days)") {
@@ -68,37 +59,40 @@
     [height - marginBottom, marginTop]
   );
 
-
-
+  // Define the line and area generators
   $: {
     if (plot_type == "By hour (last 30 days)"){
       line = d3
-    .line()
-    .x((d) => xScale(d.time))
-    .y((d) => yScale(d.counts));
+        .line()
+        .x((d) => xScale(d.time))
+        .y((d) => yScale(d.counts));
 
+      area = d3
+        .area()
+        .x((d) => xScale(d.time))
+        .y1((d) => yScale(d.counts))
+        .y0(height - marginBottom);  // The bottom of the area
     }
     else {
       line = d3
-    .line()
-    .x((d) => xScale(new Date(d.timestamp)))
-    .y((d) => yScale(d.counts));
+        .line()
+        .x((d) => xScale(new Date(d.timestamp)))
+        .y((d) => yScale(d.counts));
 
+      area = d3
+        .area()
+        .x((d) => xScale(new Date(d.timestamp)))
+        .y1((d) => yScale(d.counts))
+        .y0(height - marginBottom);  // The bottom of the area
     }
   }
-
-
-
-
-
 </script>
-{#if data}
 
+{#if data}
 <div bind:clientWidth={width}>
   <svg {width} {height}>
     <!-- X-Axis -->
     <g transform="translate(0,{height - marginBottom})">
-      
       <line
         stroke="currentColor"
         x1={marginLeft - 6}
@@ -126,15 +120,11 @@
       {/each}
     </g>
 
-
     <!-- Y-Axis and Grid Lines -->
     <g transform="translate({marginLeft},0)">
       {#each yScale.ticks(4) as tick}
         {#if tick !== 0}
-          <!-- 
-          Grid Lines. 
-          Note: First line is skipped since the x-axis is already present at 0. 
-        -->
+          <!-- Grid Lines. -->
           <line
             stroke="currentColor"
             stroke-opacity="0.1"
@@ -145,10 +135,7 @@
             y2={yScale(tick)}
           />
 
-          <!-- 
-          Y-Axis Ticks. 
-          Note: First tick is skipped since the x-axis already acts as a tick. 
-        -->
+          <!-- Y-Axis Ticks. -->
           <line
             stroke="currentColor"
             x1={0}
@@ -169,13 +156,13 @@
           {f(tick)}
         </text>
       {/each}
-
-      <!-- Y-Axis Label -->
     </g>
 
-    <path fill="none" stroke={color} stroke-width="2" d={line(data)} />
+    <!-- Area Under the Line -->
+    <path fill={color} fill-opacity="0.4" d={area(data)} />
 
+    <!-- Line Plot -->
+    <path fill="none" stroke={color} stroke-width="2.5" d={line(data)} />
   </svg>
-  
 </div>
 {/if}

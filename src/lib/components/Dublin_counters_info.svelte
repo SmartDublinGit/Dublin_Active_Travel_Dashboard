@@ -24,7 +24,6 @@
 
 
     async function add(a) {
-        console.log("adding");
         const response = await fetch("api/", {
             method: "POST",
             body: JSON.stringify({ a }),
@@ -207,8 +206,7 @@ function updateTotals(data) {
             if (filtData2.length > 0) {
 
                 totalMap = {}
-                console.log(filtData2)
-                console.log('filtData2')
+    
 
 
                 filtData2.forEach(function(dd){
@@ -332,7 +330,7 @@ function updateTotals(data) {
         background: white;
         width: 100%;
         border-radius: 15px;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0);
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
         padding-bottom: 2px;
         margin-bottom: 20px;
         cursor: pointer;

@@ -55,7 +55,7 @@
 
     if ($RegionID == "999999") {
       txt =
-        'This view shows the <a href="https://www.cso.ie/en/releasesandpublications/ep/p-cpp7/census2022profile7-employmentoccupationsandcommuting/commutingtowork/" > Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. Click on a <a style="font-weight:bold;color:#6d8495">statistic</a> for information on how it was calculated. ';
+        'This view shows the <a href="https://www.cso.ie/en/releasesandpublications/ep/p-cpp7/census2022profile7-employmentoccupationsandcommuting/commutingtowork/" > Means of Travel data from the 2022 and 2016 census</a>, aggregated at local electoral level. This question asked people how they travelled to work, school or college. Note: the 2022 Census also included a value called "Work mostly from home", which may skew the results. Click on a <a style="font-weight:bold;color:#6d8495">statistic</a> for information on how it was calculated. ';
       tit = "this view";
     }
 
@@ -207,8 +207,12 @@ else{
 
 
 
+
+
+
+
 <div class="flex-items2">
-  <div class="overall2" style="background-color:{sel=='prem_deaths'?"#a7c9de44":"white"}" on:click={function () {
+  <div class="overall2" style="background-color:{sel=='prem_deaths'?"#a7c9de44":"#ffffffaa"}" on:click={function () {
     sel = "prem_deaths";
     resetMap();
   }}>
@@ -229,7 +233,7 @@ else{
    
   </div>
 
-  <div class="overall2" style="background-color:{sel=='health_exp'?"#a7c9de44":"white"}" on:click={function () {
+  <div class="overall2" style="background-color:{sel=='health_exp'?"#a7c9de44":"#ffffffaa"}" on:click={function () {
     sel = "health_exp";
     resetMap();
   }}>
@@ -245,7 +249,7 @@ else{
 </div>
 
 <div class="flex-items2">
-  <div class="overall2" style="background-color:{sel=='co2'?"#a7c9de44":"white"}" on:click={function () {
+  <div class="overall2" style="background-color:{sel=='co2'?"#a7c9de44":"#ffffffaa"}" on:click={function () {
     sel = "co2";
     resetMap();
   }}>
@@ -259,7 +263,7 @@ else{
     </div>
   </div>
 
-  <div class="overall2" style="background-color:{sel=='cong'?"#a7c9de44":"white"}" on:click={function () {
+  <div class="overall2" style="background-color:{sel=='cong'?"#a7c9de44":"#ffffffaa"}" on:click={function () {
     sel = "cong";
   }}>
     <h2 class="dublin-header"><Fa icon={faCarSide} /> Congestion</h2>
@@ -291,7 +295,7 @@ else{
 
   .overall {
     border: 0px solid #f5f5f5;
-    background: white;
+    background: #ffffffaa;
     border-radius: 15px;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
     padding: 18px;
@@ -324,10 +328,10 @@ border-radius: 15px 15px 0px 0px;
   }
 
   .overall2 {
-    background: white;
+    background: #ffffffaa;
     width: 100%;
     border-radius: 15px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
     padding-bottom: 2px;
     margin-bottom: 20px;
     cursor: pointer;

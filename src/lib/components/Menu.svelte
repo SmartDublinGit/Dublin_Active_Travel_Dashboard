@@ -1,8 +1,9 @@
 <script>
-	let expanded = false;
 
+import img from '$lib/images/newlogo.svg';
+
+	let expanded = false;
 	let expandedHierarchy1 = true;
-	let expandedHierarchy2 = false;
 
 	import { visModeOptions, visMode } from "../../stores/filterData";
 
@@ -11,8 +12,7 @@
 	};
 	const toggleExpanded = (_) => (expanded = !expanded);
 	const toggleHierarchy1 = (_) => (expandedHierarchy1 = !expandedHierarchy1);
-	const toggleHierarchy2 = (_) => (expandedHierarchy2 = !expandedHierarchy2
-	)
+
 	;
 
 	setTimeout(()=>{expanded=true},1000)
@@ -21,13 +21,15 @@
 <nav class:expanded>
 	<button on:click={toggleExpanded}>
 		{@html expanded ? '&#9204;': "&#8801"}
-		<span style="padding: none;font-size: 16px;font-weight:100">{expanded ? "" : "DATA"}</span>
+
+
 	</button>
 
 	<section class="non-essential">
 		<ul>
-			<h3>Data Type</h3>
-			<hr />
+			<img class = 'img' src={img} alt="my image" />
+
+		
 
 			<!-- Hierarchy 1 -->
 		
@@ -62,12 +64,7 @@
 								<span>{d.label}</span>
 							</li>
 						{/each}
-			
 				</div>
-	
-
-
-
 		</ul>
 	</section>
 </nav>
@@ -125,7 +122,7 @@
 	}
 
 	hr {
-		color: #a2b7c4;
+		height: 0;
 		width: 80%;
 	}
 
@@ -142,6 +139,15 @@
 		padding: none;
 		margin: none;
 	}
+
+	.img{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  width: 150px;
+
+}
+
 
 	/** Here's all the fading in and out stuff **/
 

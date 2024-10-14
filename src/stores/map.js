@@ -1,7 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { get, writable } from "svelte/store";
-// import { env } from '$env/dynamic/public';
-
+import { env } from '$env/dynamic/public';
 import { RegionID, fillLayer, stepcounters, showLanes, strava_track } from "./region";
 import { getCurrentCoords } from "./getCoords";
 import { metricToggle } from "./filterData"

@@ -4,6 +4,9 @@
 
   let range
 
+  $: {console.log($colorBreaks2.length)}
+  
+
     $:{ if(get(visMode) !='temp')
     {
         range = $colorBreaks2[$colorBreaks2.length-1] - $colorBreaks2[0]}

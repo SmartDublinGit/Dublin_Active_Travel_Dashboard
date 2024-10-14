@@ -29,7 +29,7 @@
     summ = 0;
 
     keys.forEach(function (d) {
-      if (d.includes("trips") & ~d.includes("TOTAL")) {
+      if (d.includes("trips") && !d.includes("TOTAL")) {
         pct.push(d);
         summ += data[d];
         final_data[d] = data[d];
@@ -44,9 +44,6 @@
 
   let radius = Math.min(width, height) / 2 - margin;
 
-  // Create dummy data
-
-  // set the color scale
   // Compute the position of each group on the pie:
   const pie = d3
     .pie()
@@ -66,11 +63,12 @@
     return d.startAngle + (d.endAngle - d.startAngle) / 2;
   }
 
-  // The arc generator
+  // The arc generator with corner radius (border-radius effect)
   const arc = d3
     .arc()
-    .innerRadius(radius * 0.6) // This is the size of the donut hole
-    .outerRadius(radius * 0.9);
+    .innerRadius(radius * 0.6)  // Inner radius for the donut hole
+    .outerRadius(radius * 0.9)  // Outer radius for the arcs
+    .cornerRadius(4);           // Rounded corners with 2px radius
 
   // Another arc that won't be drawn. Just for labels positioning
   const outerArc = d3
@@ -103,18 +101,6 @@
         {calculatePercentage(slice)}
       </text>
     {/each}
-
-    <!-- {#each data_ready as slice,i}
-    <text
-      transform={`translate(${outerArc.centroid(slice)})`}
-      dy=".35em"
-      text-anchor="middle"
-      font-size="14px"
-      fill="black"
-    >
-      {calculatePercentage(slice,i)}
-    </text>
-  {/each}  -->
   </g>
 </svg>
 
@@ -127,24 +113,4 @@
     display: flex;
   }
 
-  .legend {
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 0px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin: 1px 5px;
-    font-size: 14px;
-  }
-
-  .legend-color {
-    width: 12px;
-    height: 12px;
-    margin-right: 10px;
-    display: inline-block;
-  }
 </style>

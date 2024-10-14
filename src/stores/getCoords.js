@@ -1,5 +1,4 @@
 
-
 export const getInitialCoords = (map, usBounds) => {
   let initialCoords = map.cameraForBounds(usBounds);
   initialCoords.zoom = parseFloat(initialCoords.zoom.toFixed(3));

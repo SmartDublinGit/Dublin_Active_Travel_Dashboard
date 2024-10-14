@@ -135,8 +135,10 @@ input[type=checkbox] {
     flex: 0 1 100%;
     border-radius: 15px;
     box-sizing: border-box;
-    border: 5px solid #ffffff;
+    border: 0px solid #ffffff;
     min-height: 450px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
+
 
 
 
