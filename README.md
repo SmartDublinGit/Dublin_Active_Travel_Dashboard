@@ -63,6 +63,10 @@ Generated through _Calculations/Census_calculations/google_calculations
 * API Integration: Eco-Visio API
 
 ## Setup and Deployment <a name="setup"></a>
+
+* Available at [this link](https://active-travel-dublin.vercel.app/)
+
+* Install your own version by using the following
 ```bash
 # Install dependencies
 npm install
