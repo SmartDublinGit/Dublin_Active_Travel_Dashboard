@@ -1,4 +1,4 @@
-# Dublin Active Travel Dashboard Documentation
+# Dublin Region Active Travel Dashboard Documentation
 
 ## Table of Contents
 1. [Overview](#overview)
