@@ -14,7 +14,7 @@ The Dublin Active Travel Dashboard is a comprehensive visualization platform tha
 ## Data Sources <a name="data-sources"></a>
 
 ### 1. Census Travel Analysis Dataset
-Generated through [Census Analysis Jupyter Notebook](#census-processing) which processes:
+Generated through _Calculations/Census_calculations/census calculations.ipynb_ which processes:
 * 2016-2022 Small Area census statistics 
 * Geographic boundaries for Small Areas and Electoral Divisions
 * Comparative analysis of transport modes including:
@@ -24,7 +24,8 @@ Generated through [Census Analysis Jupyter Notebook](#census-processing) which p
 * Outputs census_data_total.geojson for visualization
 
 ### 2. Google Modal Split Dataset
-Generated through [Google Transportation Analysis Notebook](#google-processing) which processes:
+Generated through _Calculations/Census_calculations/google_calculations
+.ipynb_ which processes:
 * Constituency-level transportation data
 * Mode split calculations across Dublin
 * Geographic boundary processing 
