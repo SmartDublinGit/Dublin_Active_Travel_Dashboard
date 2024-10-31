@@ -1,4 +1,4 @@
-//contains info on the regions being selected
+//contains info on the regions or counters being selected
 
 import { writable} from "svelte/store";
 

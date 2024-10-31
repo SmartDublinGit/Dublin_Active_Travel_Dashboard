@@ -5,21 +5,21 @@
   import Dublin_strava_info from "./Dublin_strava_info.svelte";
 
   import { visMode } from "../../stores/filterData";
-  
-  export let cmode
-  export let dmode
-  export let width
+
+  export let cmode;
+  export let dmode;
+  export let width;
 </script>
 
 <div class="map-info">
   {#if $visMode == "census"}
-    <Dublin_info bind:cmode={cmode} bind:dmode={dmode}/>
+    <Dublin_info bind:cmode bind:dmode />
   {:else if $visMode == "google"}
     <Dublin_district_info />
-    {:else if $visMode == "strava"}
-    <Dublin_strava_info width={width}  />
+  {:else if $visMode == "strava"}
+    <Dublin_strava_info {width} />
   {:else}
-    <Dublin_counters_info width={width} />
+    <Dublin_counters_info {width} />
   {/if}
 </div>
 

@@ -34,6 +34,7 @@
     "@urbaninstitute/dataviz-components": "^0.0.2",
     "axios": "^1.7.2",
     "d3": "^7.8.5",
+    "dotenv": "^16.4.5",
     "mapbox-gl": "^3.0.1",
     "pym.js": "^1.3.2",
     "request": "^2.88.2",

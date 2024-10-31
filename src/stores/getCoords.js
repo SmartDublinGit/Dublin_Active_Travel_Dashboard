@@ -1,22 +1,31 @@
+// this keeps track of what co-ordinates the map is on.
 
-export const getInitialCoords = (map, usBounds) => {
-  let initialCoords = map.cameraForBounds(usBounds);
-  initialCoords.zoom = parseFloat(initialCoords.zoom.toFixed(3));
-  initialCoords.center.lat = parseFloat(initialCoords.center.lat.toFixed(3));
-  initialCoords.center.lng = parseFloat(initialCoords.center.lng.toFixed(3));
-
-  return initialCoords;
-};
+const roundCoordinate = (value) => parseFloat(value.toFixed(3));
 
 export const getCurrentCoords = (map) => {
-  let currentCoords = {
-    center: map.getCenter(),
-    zoom: parseFloat(map.getZoom().toFixed(3)),
+  const center = map.getCenter();
+  
+  return {
+    zoom: roundCoordinate(map.getZoom()),
     bearing: map.getBearing(),
     pitch: map.getPitch(),
+    center: {
+      lat: roundCoordinate(center.lat),
+      lng: roundCoordinate(center.lng)
+    }
   };
-  currentCoords.center.lat = parseFloat(currentCoords.center.lat.toFixed(3));
-  currentCoords.center.lng = parseFloat(currentCoords.center.lng.toFixed(3));
-
-  return currentCoords;
 };
+
+export const getInitialCoords = (map, bounds) => {
+  const coords = map.cameraForBounds(bounds);
+  
+  return {
+    ...coords,
+    zoom: roundCoordinate(coords.zoom),
+    center: {
+      lat: roundCoordinate(coords.center.lat),
+      lng: roundCoordinate(coords.center.lng)
+    }
+  };
+};
+

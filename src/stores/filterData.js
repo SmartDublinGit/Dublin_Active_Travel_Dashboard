@@ -1,5 +1,6 @@
-import { writable, readable, derived } from "svelte/store";
+// this keeps track on what option the user has selected.
 
+import { writable, readable, derived } from "svelte/store";
 
 //holds all possible active variables
 export const metricToggleOptions = readable([
@@ -57,10 +58,8 @@ export const censusOptions = readable(['2022','2016',"Change"])
 // what screen we are in (left hand bar)
 export const visMode = writable("census");
 
-// what mode of transport
 export const modeToggle = writable("Walking");
 
-// what year we are showing
 export const censusMode = writable("2022");
 
 export const dataOptions = readable(['Total','Work',"School or College"]);
@@ -68,7 +67,6 @@ export const dataOptions = readable(['Total','Work',"School or College"]);
 export const dataMode = writable('Total');
 
 //holds currently active variable
-
 export const metricToggle = derived([visMode, 
   censusMode, 
   modeToggle,
@@ -160,7 +158,6 @@ export const metricToggle = derived([visMode,
   
   })
 
-
   export const colorBreaks2 = derived([metricToggle
   ], ([$metricToggle]) => {
   
@@ -181,10 +178,16 @@ export const metricToggle = derived([visMode,
        cb = [0., 0.015, 0.03, 0.045, 0.06, 0.075, 0.09, 0.105, 0.12,
          0.135, 0.15, 0.165, 0.18, 0.195, 0.21]
        }
+
+       if($metricToggle.includes('cycle_')){
+        cb = [0, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07]
+       }
+      
+
+
    }
    return cb
   })
-  
   
   export const cols2 = derived([metricToggle
   ], ([$metricToggle]) => {
@@ -228,17 +231,11 @@ export const metricToggle = derived([visMode,
   
   })
   
-  
-  
-  
-  
-
 export const metricLabel = derived([metricToggle, metricToggleOptions], ([$metricToggle, $metricToggleOptions]) => {
   return $metricToggleOptions.filter((d) => d.value == $metricToggle)[0].label
 })
 
-
 export let metricFormat = derived(metricToggle, ($metricToggle) => {
-  let format = new Intl.NumberFormat('en-US', { style: "percent" })
+  let format = new Intl.NumberFormat('en-UK', { style: "percent" })
   return format;
 })

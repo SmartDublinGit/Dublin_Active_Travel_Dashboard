@@ -1,235 +1,181 @@
 <script>
-    // right hand side if we are looking at census data
+import { format } from "d3";
+import { resetMap } from "../../stores/map";
+import LinePlot from "./LinePlot.svelte";
+import { metricToggle } from "../../stores/filterData";
+import {
+    selected_counter,
+    counter_data,
+    counter_name,
+} from "../../stores/region";
 
-    import { format } from "d3";
-    import { resetMap } from "../../stores/map";
+// Constants
+const DEFAULT_VIEW_MODE = "By week (last 3 months)";
+const DEFAULT_LOCATION = "Grand Canal Cycle Path - Lock C5";
+const DEFAULT_COUNTER_ID = "100043587";
+const HOURS_IN_DAY = 24;
+const MONTHS_IN_YEAR = 12;
 
-    import LinePlot from "./LinePlot.svelte";
-
-    import { dataMode, metricToggle } from "../../stores/filterData";
-    import {
-        selected_counter,
-        counter_data,
-        counter_name,
-    } from "../../stores/region";
-
-    export let width;
-
-    let sel = "";
-    let f = format(",.0f");
-
-    let txt =
-        "This is a live view of pedestrian and cycling counters in Dublin, accessed through the Eco-visio API. Click on a counter for pedestrian and/or cycling footfall over different time periods. Note: there are issues with some counters, which Eco-Visio are investigating.";
-    let tit = "this view ";
-
-
-    async function add(a) {
-        const response = await fetch("api/", {
-            method: "POST",
-            body: JSON.stringify({ a }),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        let total = await response.json();
-
-
-        counter_data.set(total);
-     
-
-        if (counterMode == "By month (last 3 years)") {
-            prep_data(total, "sixMonths_yearly",(12*3));
-           
-        }
-
-        if (counterMode == "By week (last year)") {
-            prep_data(total, "sixMonths_weekly",12);
-        }
-
-        if (counterMode == "By week (last 3 months)") {
-            prep_data(total, "sixMonths",3);
-        }
-
-        if (counterMode == "By hour (last 30 days)") {
-            prep_data(total, "lastMonth",1);
-        }
+const TIME_PERIOD_CONFIG = {
+    "By month (last 3 years)": {
+        apiKey: "sixMonths_yearly",
+        divisor: MONTHS_IN_YEAR * 3
+    },
+    "By week (last year)": {
+        apiKey: "sixMonths_weekly",
+        divisor: MONTHS_IN_YEAR
+    },
+    "By week (last 3 months)": {
+        apiKey: "sixMonths",
+        divisor: 3
+    },
+    "By hour (last 30 days)": {
+        apiKey: "lastMonth",
+        divisor: 1
     }
-    let totalMap 
+};
 
+// Exported props
+export let width;
 
-  
-// Function to update the totals
-function updateTotals(data) {
-  data.forEach(item => {
-    if (totalMap[item.timestamp]) {
-      totalMap[item.timestamp].counts += item.counts; // Add to the existing total
-    } else {
-      totalMap[item.timestamp] = { ...item }; // Create a new entry if id doesn't exist
+// State variables
+let selectedLocation = "";
+let numberFormatter = format(",.0f");
+let descriptionText = "This is a live view of pedestrian and cycling counters in Dublin, accessed through the Eco-visio API. Click on a counter for pedestrian and/or cycling footfall over different time periods. Note: there are issues with some counters, which Eco-Visio are investigating.";
+let viewTitle = "this view";
+let timeSeriesData = [];
+let currentTimeMode = DEFAULT_VIEW_MODE;
+let previousTimeMode = DEFAULT_VIEW_MODE;
+let previousMetricMode = "";
+let travelModeType = "";
+let averageCount = "";
+
+// Data processing state
+let aggregatedCounts = {};
+let temporaryData = [];
+let processedData = [];
+let hourlyGroups = {};
+let dailyDataPoints = [];
+
+async function fetchCounterData(counterId) {
+    const response = await fetch("api/", {
+        method: "POST",
+        body: JSON.stringify({ a: counterId }),
+        headers: {
+            "content-type": "application/json",
+        },
+    });
+    const data = await response.json();
+    counter_data.set(data);
+
+    const config = TIME_PERIOD_CONFIG[currentTimeMode];
+    if (config) {
+        processTimeSeriesData(data, config.apiKey, config.divisor);
     }
-  });
 }
 
-    function calculateTot(data) {
-        const totalCounts = data.reduce((acc, obj) => acc + obj.counts, 0);
-        return totalCounts
-    }
-
-
-    $: {
-        if ($metricToggle != prev_menu) {
-            counter_name.set("Grand Canal Cycle Path - Lock C5");
-            selected_counter.set("100043587");
-            add($selected_counter);
-            prev_menu = $metricToggle;
-        }
-    }
-
-    $: {
-        if (counterMode != prev) {
-            c=[]
-            add($selected_counter);
-            prev = counterMode;
-        }
-    }
-
-    $: {
-      
-        add($selected_counter);
-    }
-
-
-    let a;
-    let w = 500;
-    let filtData = [];
-    let filtData2 = [];
-    let b = [];
-    let c = [];
-    let groups = {};
-    let ttype = "";
-    let median = "";
-
-    let prev_menu = "";
-
-    let counterMode = "By week (last 3 months)";
-    let prev = "By week (last 3 months)";
-
-
-    function prep_data(a, timeseries,div) {
-        filtData = [];
-        filtData2 = [];
-        groups = {};
-        b = [];
-        c = [];
-
-        if (timeseries == "lastMonth") {
-            a["lastMonth"].forEach(function (d) {
-                if (
-                    d.travelMode == "pedestrian" &&
-                    $metricToggle == "walk_counter"
-                ) {
-                    filtData.push(d);
-                    ttype = d.travelMode;
-
-                }
-
-                if (
-                    d.travelMode == "bike" &&
-                    $metricToggle == "cycle_counter"
-                ) {
-                    filtData.push(d);
-                    ttype = d.travelMode;
-
-                }
-
-                if ($metricToggle == "active_counter") {
-                    filtData.push(d);
-                    ttype = d.travelMode;
-
-                }
-            });
-
-            if (filtData.length > 0) {
-                totalMap = {}
-       
-                filtData.forEach(function(dd){
-                    updateTotals(dd.data)
-                })
-
-                b = Object.values(totalMap);
-
-                b.forEach(function (o) {
-                    o.date = new Date(o.timestamp);
-                    let hour = o.date.getHours();
-                    if (hour in groups) {
-                        groups[hour] += o.counts;
-                    } else {
-                        groups[hour] = o.counts;
-                    }
-                });
-
-                for (let jj = 0; jj < 24; jj++) {
-                    c.push({ time: jj, counts: groups[jj] });
-                }
-
-                median = calculateTot(c)/div;
-
-            }
+function updateAggregatedCounts(data) {
+    data.forEach(item => {
+        if (aggregatedCounts[item.timestamp]) {
+            aggregatedCounts[item.timestamp].counts += item.counts;
         } else {
-            a[timeseries].forEach(function (d) {
+            aggregatedCounts[item.timestamp] = { ...item };
+        }
+    });
+}
 
-                if (
-                    d.travelMode == "pedestrian" &&
-                    $metricToggle == "walk_counter"
-                ) {
-                    filtData2.push(d);
-                    ttype = d.travelMode;
+function calculateTotal(data) {
+    return data.reduce((acc, obj) => acc + obj.counts, 0);
+}
 
-                }
-
-                if (
-                    d.travelMode == "bike" &&
-                    $metricToggle == "cycle_counter"
-                    
-                ) {
-                    filtData2.push(d);
-                    ttype = d.travelMode;
-
-                }
-
-                if ($metricToggle == "active_counter") {
-                    filtData2.push(d);
-                    ttype = d.travelMode;
-
-                }
-            });
-
-            if (filtData2.length > 0) {
-
-                totalMap = {}
+function filterByTravelMode(data, mode) {
+    const modeMap = {
+        "walk_counter": "pedestrian",
+        "cycle_counter": "bike"
+    };
     
+    return data.filter(d => 
+        mode === "active_counter" || d.travelMode === modeMap[mode]
+    );
+}
 
+function processHourlyData(filteredData) {
+    aggregatedCounts = {};
+    filteredData.forEach(record => updateAggregatedCounts(record.data));
+    
+    const timestampData = Object.values(aggregatedCounts);
+    hourlyGroups = {};
+    
+    timestampData.forEach(record => {
+        const date = new Date(record.timestamp);
+        const hour = date.getHours();
+        hourlyGroups[hour] = (hourlyGroups[hour] || 0) + record.counts;
+    });
+    
+    timeSeriesData = Array.from({ length: HOURS_IN_DAY }, (_, hour) => ({
+        time: hour,
+        counts: hourlyGroups[hour] || 0
+    }));
+}
 
-                filtData2.forEach(function(dd){
-                    updateTotals(dd.data)
-                })
+function processTimeSeriesData(data, timePeriod, divisor) {
+    temporaryData = [];
+    processedData = [];
+    hourlyGroups = {};
+    dailyDataPoints = [];
+    timeSeriesData = [];
 
-                c = Object.values(totalMap);
-                c = filtData2[0].data;
-                c.forEach(function (o) {
-                    o.counts = o.traffic.counts;
-                });
-            }
-
-            median = calculateTot(c)/div;
+    if (timePeriod === "lastMonth") {
+        const filteredData = filterByTravelMode(data.lastMonth, $metricToggle);
+        if (filteredData.length > 0) {
+            processHourlyData(filteredData);
+            travelModeType = filteredData[0].travelMode;
+            averageCount = calculateTotal(timeSeriesData) / divisor;
+        }
+    } else {
+        const filteredData = filterByTravelMode(data[timePeriod], $metricToggle);
+        if (filteredData.length > 0) {
+            aggregatedCounts = {};
+            filteredData.forEach(record => updateAggregatedCounts(record.data));
+            timeSeriesData = filteredData[0].data.map(record => ({
+                ...record,
+                counts: record.traffic.counts
+            }));
+            travelModeType = filteredData[0].travelMode;
+            averageCount = calculateTotal(timeSeriesData) / divisor;
         }
     }
+}
+
+// Reactive statements
+$: {
+    if ($metricToggle !== previousMetricMode) {
+        counter_name.set(DEFAULT_LOCATION);
+        selected_counter.set(DEFAULT_COUNTER_ID);
+        fetchCounterData($selected_counter);
+        previousMetricMode = $metricToggle;
+    }
+}
+
+$: {
+    if (currentTimeMode !== previousTimeMode) {
+        timeSeriesData = [];
+        fetchCounterData($selected_counter);
+        previousTimeMode = currentTimeMode;
+    }
+}
+
+$: {
+    fetchCounterData($selected_counter);
+}
+
 </script>
 
 <div class="container">
     <div
         class="overall2"
         on:click={function () {
-            sel = "";
+            selectedLocation = "";
             resetMap();
         }}
     >
@@ -244,8 +190,8 @@ function updateTotals(data) {
             </div>
             <div class="a1">
                 <div class="text">
-                    <p class="label">{'Daily '+ (ttype=='pedestrian'?'Pedestrians':"Cyclists")} </p>
-                    <p class="number" style='color:{ttype!='pedestrian'?'#955196':'#374c80'}'>{f(median/30)}</p>
+                    <p class="label">{'Daily '+ (travelModeType=='pedestrian'?'Pedestrians':"Cyclists")} </p>
+                    <p class="number" style='color:{travelModeType!='pedestrian'?'#955196':'#374c80'}'>{numberFormatter(averageCount/30)}</p>
                 </div>
             </div>
         </div>
@@ -257,12 +203,12 @@ function updateTotals(data) {
             <div class="text">
                     <div class="a1">
                         <p class="label" style="margin-bottom: 0px;">
-                            {"Historical "+(ttype=='pedestrian'?'Pedestrian ':"Cyclist ")+'counts'}
+                            {"Historical "+(travelModeType=='pedestrian'?'Pedestrian ':"Cyclist ")+'counts'}
                         </p>
                     </div>
 
                     <div class="a2">
-                        <select class="sel" bind:value={counterMode}>
+                        <select class="sel" bind:value={currentTimeMode}>
                             {#each ["By hour (last 30 days)", "By week (last 3 months)", "By week (last year)", "By month (last 3 years)"] as question}
                                 <option value={question}>
                                     {question}
@@ -272,8 +218,8 @@ function updateTotals(data) {
                     </div>
                 
             </div>
-            {#if c.length > 0}
-                <LinePlot data={c} width={width / 2} {ttype} plot_type={counterMode} />
+            {#if timeSeriesData.length > 0}
+                <LinePlot data={timeSeriesData} width={width / 2} ttype={travelModeType} plot_type={currentTimeMode} />
             {:else}
             <div class="text">
                 <p class="loc">{"fetching data..."}</p>
@@ -285,8 +231,8 @@ function updateTotals(data) {
 
     <div class="overall2">
         <div class="text2">
-            <h2 class="dublin-header">{"About " + tit}</h2>
-            <div class="number2">{@html txt}</div>
+            <h2 class="dublin-header">{"About " + viewTitle}</h2>
+            <div class="number2">{@html descriptionText}</div>
         </div>
     </div>
 </div>

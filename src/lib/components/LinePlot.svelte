@@ -15,12 +15,20 @@
   export let width;
   export let plot_type;
 
-  let formatTime
+  let formatTime;
 
-  $: {if(plot_type=='By month (average)'){
-    formatTime=d3.utcFormat("%b")}
-    else{
-      formatTime=d3.utcFormat("%b '%y")}}
+  $: {
+    formatTime = d3.utcFormat("%b '%y");
+
+    if (plot_type == "By month (average)") {
+      formatTime = d3.utcFormat("%b");
+    } 
+
+    if (plot_type == "By week (last 3 months)") {
+      formatTime = d3.utcFormat("%d/%m");
+    } 
+
+  }
 
   let f = d3.format(",.0f");
 
@@ -39,7 +47,9 @@
     }
   }
 
-  let xScale;
+  let xScale = d3.scaleUtc(
+        d3.extent(data, (d) => new Date(d.timestamp)),
+        [marginLeft, width - marginRight]);
 
   $: {
     if (plot_type == "By hour (last 30 days)") {
@@ -61,7 +71,7 @@
 
   // Define the line and area generators
   $: {
-    if (plot_type == "By hour (last 30 days)"){
+    if (plot_type == "By hour (last 30 days)") {
       line = d3
         .line()
         .x((d) => xScale(d.time))
@@ -71,9 +81,8 @@
         .area()
         .x((d) => xScale(d.time))
         .y1((d) => yScale(d.counts))
-        .y0(height - marginBottom);  // The bottom of the area
-    }
-    else {
+        .y0(height - marginBottom); // The bottom of the area
+    } else {
       line = d3
         .line()
         .x((d) => xScale(new Date(d.timestamp)))
@@ -83,86 +92,91 @@
         .area()
         .x((d) => xScale(new Date(d.timestamp)))
         .y1((d) => yScale(d.counts))
-        .y0(height - marginBottom);  // The bottom of the area
+        .y0(height - marginBottom); // The bottom of the area
     }
   }
 </script>
 
 {#if data}
-<div bind:clientWidth={width}>
-  <svg {width} {height}>
-    <!-- X-Axis -->
-    <g transform="translate(0,{height - marginBottom})">
-      <line
-        stroke="currentColor"
-        x1={marginLeft - 6}
-        x2={width - marginRight}
-      />
-
-      {#each xScale.ticks(4) as tick}
-        <!-- X-Axis Ticks -->
+  <div bind:clientWidth={width}>
+    <svg {width} {height}>
+      <!-- X-Axis -->
+      <g transform="translate(0,{height - marginBottom})">
         <line
           stroke="currentColor"
-          x1={xScale(tick)}
-          x2={xScale(tick)}
-          y1={0}
-          y2={6}
+          x1={marginLeft - 6}
+          x2={width - marginRight}
         />
 
-        <!-- X-Axis Tick Labels -->
-        <text fill="currentColor" text-anchor="middle" x={xScale(tick)} y={22}>
-          {#if plot_type!="By hour (last 30 days)"}
-          {formatTime(tick)}
-          {:else}
-          {tick+':00'}
+        {#each xScale.ticks(5) as tick}
+          <!-- X-Axis Ticks -->
+          <line
+            stroke="currentColor"
+            x1={xScale(tick)}
+            x2={xScale(tick)}
+            y1={0}
+            y2={6}
+          />
+
+          <!-- X-Axis Tick Labels -->
+          <text
+            fill="currentColor"
+            text-anchor="middle"
+            x={xScale(tick)}
+            y={22}
+          >
+            {#if plot_type != "By hour (last 30 days)"}
+              {formatTime(tick)}
+            {:else}
+              {tick + ":00"}
+            {/if}
+          </text>
+        {/each}
+      </g>
+
+      <!-- Y-Axis and Grid Lines -->
+      <g transform="translate({marginLeft},0)">
+        {#each yScale.ticks(4) as tick}
+          {#if tick !== 0}
+            <!-- Grid Lines. -->
+            <line
+              stroke="currentColor"
+              stroke-opacity="0.1"
+              stroke-width="1.5px"
+              x1={0}
+              x2={width - marginLeft - marginRight}
+              y1={yScale(tick)}
+              y2={yScale(tick)}
+            />
+
+            <!-- Y-Axis Ticks. -->
+            <line
+              stroke="currentColor"
+              x1={0}
+              x2={-6}
+              y1={yScale(tick)}
+              y2={yScale(tick)}
+            />
           {/if}
-        </text>
-      {/each}
-    </g>
 
-    <!-- Y-Axis and Grid Lines -->
-    <g transform="translate({marginLeft},0)">
-      {#each yScale.ticks(4) as tick}
-        {#if tick !== 0}
-          <!-- Grid Lines. -->
-          <line
-            stroke="currentColor"
-            stroke-opacity="0.1"
-            stroke-width="1.5px"
-            x1={0}
-            x2={width - marginLeft - marginRight}
-            y1={yScale(tick)}
-            y2={yScale(tick)}
-          />
+          <!-- Y-Axis Tick Labels -->
+          <text
+            fill="currentColor"
+            text-anchor="end"
+            dominant-baseline="middle"
+            x={-9}
+            y={yScale(tick)}
+          >
+            {f(tick)}
+          </text>
+        {/each}
+      </g>
 
-          <!-- Y-Axis Ticks. -->
-          <line
-            stroke="currentColor"
-            x1={0}
-            x2={-6}
-            y1={yScale(tick)}
-            y2={yScale(tick)}
-          />
-        {/if}
+      <!-- Area Under the Line -->
+      <path fill={color} fill-opacity="0.4" d={area(data)} />
 
-        <!-- Y-Axis Tick Labels -->
-        <text
-          fill="currentColor"
-          text-anchor="end"
-          dominant-baseline="middle"
-          x={-9}
-          y={yScale(tick)}
-        >
-          {f(tick)}
-        </text>
-      {/each}
-    </g>
-
-    <!-- Area Under the Line -->
-    <path fill={color} fill-opacity="0.4" d={area(data)} />
-
-    <!-- Line Plot -->
-    <path fill="none" stroke={color} stroke-width="2.5" d={line(data)} />
-  </svg>
-</div>
+      <!-- Line Plot -->
+      <path fill="none" stroke={color} stroke-width="2.5" d={line(data)} />
+    </svg>
+  </div>
 {/if}

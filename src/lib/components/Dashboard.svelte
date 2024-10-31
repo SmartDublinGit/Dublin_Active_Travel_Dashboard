@@ -1,35 +1,24 @@
 <script>
+  // Component and asset imports
   import Sidebar from "./Sidebar.svelte";
   import MapComponent from "./MapComponent.svelte";
   import Menu from "./Menu.svelte";
   import img from '$lib/images/Smart-Dublin-Large.png';
 
-
+  // State variables and stores
   let width = 0;
+  let subname = '';
 
+  // Store imports
   import { mapStore } from "../../stores/map";
-  import {
-    metricToggle,
-    metricToggleOptions,
-    visMode,
-    censusMode,
-    dataMode
-  } from "../../stores/filterData";
+  import { metricToggle, metricToggleOptions, visMode, censusMode, dataMode } from "../../stores/filterData";
   import { RegionID } from "../../stores/region";
 
-let subname = ''
+  // Reactive statement to set subname based on visMode
+  $: subname = ['google', 'census'].includes($visMode) ? 'boundary data' : 'route-based data';
 
-$: {if(['google','census'].includes($visMode))
-{subname='boundary data'}
-else{
-  subname= 'route-based data'
-}
-
-}
-
-  // when i change one of the options.
-
-  $: if ($metricToggle && $mapStore != null && $metricToggleOptions != null) {
+  // Update map layer and reset map when options change
+  $: if ($metricToggle && $mapStore && $metricToggleOptions) {
     RegionID.set("999999");
     $mapStore.changeActiveLayer($metricToggle, $metricToggleOptions);
     $mapStore.resetMap();
@@ -38,26 +27,25 @@ else{
 
 <main>
   <Menu />
-  <div class="container"  bind:clientWidth={width}>
+  <div class="container" bind:clientWidth={width}>
     <div class="dashboard-title">{"Dublin Region Active Travel Dashboard"}</div>
-    <a href="https://smartdublin.ie/" target='_blank'>
-    <img class = 'img' src={img} alt="my image" />
+    <a href="https://smartdublin.ie/" target="_blank">
+      <img class="img" src={img} alt="Smart Dublin Logo" />
     </a>
-    <div class="map-element" >
+    <div class="map-element">
       <MapComponent selected={$visMode} bind:cmode={$censusMode} bind:dmode={$dataMode} />
-      <Sidebar width={width} bind:cmode={$censusMode} bind:dmode={$dataMode} />
+      <Sidebar {width} bind:cmode={$censusMode} bind:dmode={$dataMode} />
     </div>
   </div>
 </main>
 
 <style>
-
-.img{
-  position: absolute;
-  width: 150px;
-  top: 7px;
-  right: 0px
-}
+  .img {
+    position: absolute;
+    width: 150px;
+    top: 7px;
+    right: 0;
+  }
 
   main {
     display: grid;
@@ -71,12 +59,9 @@ else{
     color: #324754;
     font-weight: 300;
     line-height: 125%; /* 45px */
-    padding-top:10px;
-    padding-left: 20px;
-    padding-bottom:0px;
-    width: calc(100% - 16§0px);
+    padding: 10px 0 0 20px;
+    width: calc(100% - 160px);
   }
-
 
   .container {
     width: 100%;
@@ -89,10 +74,7 @@ else{
     width: calc(100% - 40px);
     display: flex;
     gap: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
   }
 
   @media screen and (max-width: 768px) {
@@ -100,12 +82,12 @@ else{
       flex-direction: column;
     }
 
-    .img{
+    .img {
       width: 110px;
     }
 
-  .dashboard-title {
-    font-size: var(--font-size-2xl);  
-    
-  }}
+    .dashboard-title {
+      font-size: var(--font-size-2xl);
+    }
+  }
 </style>
