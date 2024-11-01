@@ -1,0 +1,3 @@
+CSO Census data - https://www.cso.ie/en/releasesandpublications/ep/p-cpp7/censusofpopulation2022profile7-employmentoccupationsandcommuting/commutingtowork/#:~:text=Commuting%20Trends%20Over%20Time,%2C%20up%208%25%20since%202016.
+Google EIE data link - https://insights.sustainability.google/places/ChIJL6wn6oAOZ0gRoHExl6nHAAo
+Eco Counter API on Dublinked - https://data.smartdublin.ie/dataset/pedestrian-and-cycle-counter-api-for-dublin-region
