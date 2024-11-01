@@ -80,6 +80,8 @@ npm run dev
 
 ## Contact Details
 
-Rudi O'Reilly Meehan, [Data&Design](https://www.dataanddesign.ie/)
-Jack Kavanagh, Open Data Lead, [Smart Dublin](jack.kavanagh@dublincity.ie)
+* Rudi O'Reilly Meehan, [Data&Design](https://www.dataanddesign.ie/)
+* Jack Kavanagh, Open Data Lead, [Smart Dublin](jack.kavanagh@dublincity.ie)
+
+
 
