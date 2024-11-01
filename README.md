@@ -81,7 +81,3 @@ PUBLIC_MAPBOX_TOKEN=your_mapbox_token
 
 # Start development server
 npm run dev
-
-
-
-
