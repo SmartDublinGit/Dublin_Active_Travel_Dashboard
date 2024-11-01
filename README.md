@@ -1,4 +1,8 @@
-# Dublin Region Active Travel Dashboard Documentation
+# Dublin Region Active Travel Dashboard 
+
+## Contact
+* Rudi O'Reilly Meehan, [Data&Design](https://www.dataanddesign.ie/)
+* Jack Kavanagh, Open Data Lead, [Smart Dublin](jack.kavanagh@dublincity.ie)
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -78,10 +82,6 @@ PUBLIC_MAPBOX_TOKEN=your_mapbox_token
 # Start development server
 npm run dev
 
-## Contact Details
-
-* Rudi O'Reilly Meehan, [Data&Design](https://www.dataanddesign.ie/)
-* Jack Kavanagh, Open Data Lead, [Smart Dublin](jack.kavanagh@dublincity.ie)
 
 
 
